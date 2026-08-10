@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "系统": {
+      "type": "object",
+      "properties": {
+        "当前日期": {
+          "default": "",
+          "type": "string"
+        },
+        "时段": {
+          "default": "",
+          "type": "string"
+        },
+        "当前地点": {
+          "default": "",
+          "type": "string"
+        },
+        "当前视角": {
+          "default": "丈夫",
+          "type": "string",
+          "enum": [
+            "丈夫",
+            "小胖"
+          ]
+        },
+        "小胖来访状态": {
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "凯瑟琳": {
+      "type": "object",
+      "properties": {
+        "沦陷阶段": {
+          "default": "纯真期",
+          "type": "string",
+          "enum": [
+            "纯真期",
+            "试探期",
+            "沉沦期",
+            "堕落期"
+          ]
+        },
+        "身体开发度": {
+          "default": 0,
+          "type": "number"
+        },
+        "身体状态": {
+          "default": "",
+          "type": "string"
+        },
+        "最近事件": {
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "小胖": {
+      "type": "object",
+      "properties": {
+        "欲望值": {
+          "default": 30,
+          "type": "number"
+        },
+        "最近行为": {
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "系统",
+    "凯瑟琳",
+    "小胖"
+  ]
+}

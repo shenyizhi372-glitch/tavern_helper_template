@@ -1,0 +1,14 @@
+/* 通用状态栏基础样式：全部基于 --sb-* CSS 变量，主题由 App.vue 注入 */
+.sb-status-bar {
+  box-sizing: border-box;
+  font-family: var(--sb-font-family);
+  font-size: var(--sb-font-size);
+  color: var(--sb-text);
+  line-height: 1.5;
+}
+
+.sb-status-bar *,
+.sb-status-bar *::before,
+.sb-status-bar *::after {
+  box-sizing: border-box;
+}
