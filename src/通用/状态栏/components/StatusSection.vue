@@ -15,12 +15,22 @@
       <span class="sb-section-title">{{ theme.section.bracketLeft }}{{ section.label }}{{ theme.section.bracketRight }}</span>
       <span class="sb-divider sb-divider-right" aria-hidden="true">{{ dividerLine }}</span>
     </div>
+    <StatImage
+      v-if="section.image"
+      :source="section.image.source"
+      :data="data"
+      :fit="section.image.fit"
+      :ratio="section.image.ratio"
+      :placeholder="section.image.placeholder"
+    />
     <div v-show="expanded" class="sb-stats">
       <StatField
         v-for="(field, i) in section.fields"
         :key="field.path + '#' + i"
         :field="field"
         :value="readStat(data, field.path)"
+        :data="data"
+        :store="store"
       />
     </div>
   </section>
@@ -33,11 +43,14 @@ import type { SectionConfig, StatusBarTheme } from '../types';
 import { getByPath } from '../path';
 import SbIcon from './SbIcon.vue';
 import StatField from './StatField.vue';
+import StatImage from './StatImage.vue';
 
 const props = defineProps<{
   section: SectionConfig;
   /** stat_data 对象（由 store.data 传入，响应式） */
   data: unknown;
+  /** 数据存储（交互字段写变量用） */
+  store?: { data: unknown };
 }>();
 
 const theme = inject<Ref<StatusBarTheme>>('sbTheme')!;

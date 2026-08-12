@@ -39,6 +39,72 @@ test('parseStatusBarConfig 通过合法配置并填充默认值', () => {
   assert.equal(numberField.precision, 1);
 });
 
+test('parseStatusBarConfig 通过交互与图片字段配置', () => {
+  const parsed = parseStatusBarConfig({
+    title: '交互面板',
+    images: [
+      { id: '立绘', position: 'top', source: { type: 'static', url: 'https://x/avatar.png' }, ratio: '1/1' },
+      { id: '背景', position: 'background', source: { type: 'mapped', by: '系统.地点', map: { 厨房: 'https://x/k.png' } } },
+    ],
+    sections: [
+      {
+        id: 's1',
+        label: '操作',
+        fields: [
+          { type: 'image', path: '场景图', label: '场景', source: { type: 'fromVariable', path: '系统.场景图' } },
+          { type: 'action', path: '好感', label: '好感+1', action: { mode: 'variable', path: '角色.好感度', delta: 1 } },
+          { type: 'action', path: '对话', label: '打招呼', action: { mode: 'message', content: '你好呀' } },
+          {
+            type: 'choice',
+            path: '选择', label: '怎么回应？',
+            options: [
+              { label: '拥抱', action: { mode: 'message', content: '我抱住了她' } },
+              { label: '加好感', action: { mode: 'variable', path: '角色.好感度', delta: 5 } },
+            ],
+          },
+          { type: 'slider', path: '心情', label: '心情', min: 0, max: 100, step: 5 },
+          { type: 'input', path: '留言', label: '留言', commitOn: 'enter' },
+        ],
+      },
+    ],
+  });
+  assert.equal(parsed.images?.length, 2);
+  assert.equal(parsed.sections[0].fields.length, 6);
+});
+
+test('parseStatusBarConfig 拒绝非法交互配置', () => {
+  // message 行为缺 content
+  assert.throws(() =>
+    parseStatusBarConfig({
+      sections: [{ id: 'a', label: 'a', fields: [{ type: 'action', path: 'a', label: 'b', action: { mode: 'message' } }] }],
+    }),
+  );
+  // variable 行为缺 path
+  assert.throws(() =>
+    parseStatusBarConfig({
+      sections: [{ id: 'a', label: 'a', fields: [{ type: 'action', path: 'a', label: 'b', action: { mode: 'variable', delta: 1 } }] }],
+    }),
+  );
+  // choice 缺 options
+  assert.throws(() =>
+    parseStatusBarConfig({
+      sections: [{ id: 'a', label: 'a', fields: [{ type: 'choice', path: 'a', label: 'b' }] }],
+    }),
+  );
+  // slider 缺 path
+  assert.throws(() =>
+    parseStatusBarConfig({
+      sections: [{ id: 'a', label: 'a', fields: [{ type: 'slider', label: 'b' }] }],
+    }),
+  );
+  // static 图片缺 url
+  assert.throws(() =>
+    parseStatusBarConfig({
+      sections: [{ id: 'a', label: 'a', fields: [{ type: 'image', path: 'a', label: 'b', source: { type: 'static' } }] }],
+    }),
+  );
+});
+
 test('parseStatusBarConfig 拒绝非法配置并给出错误', () => {
   assert.throws(() => parseStatusBarConfig({ sections: [] }));
   assert.throws(() =>

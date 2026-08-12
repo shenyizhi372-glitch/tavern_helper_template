@@ -1,0 +1,211 @@
+/* 状态栏全局样式：温馨家庭风（米白面板 + 暖陶土主色） */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* 功能语义命名 */
+  --c-primary: #b0714f; /* 主色：强调、表头 */
+  --c-accent: #d98f8f; /* 强调色：孙莹区标签 */
+  --c-success: #7fa57f; /* 正向：正常选项 */
+  --c-warning: #d9a441; /* 警示 */
+  --c-danger: #c05252; /* 危险：淫秽选项 */
+  --c-surface: #fffaf3; /* 面板底色 */
+  --c-surface-alt: #f7efe2; /* 次级底色：表头条 */
+  --c-text: #4d4138; /* 主文字 */
+  --c-text-muted: #a4937f; /* 次要文字：标签 */
+  --c-border: #e9dcc9; /* 边框、分隔线 */
+  --c-user-line: #8aaed6; /* 张宝区左边线（用户） */
+  --c-font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* 通用组件主题别名：把通用组件的 --sb-* 变量映射到本项目的 --c-* 色系 */
+  --sb-primary: var(--c-primary);
+  --sb-accent: var(--c-accent);
+  --sb-success: var(--c-success);
+  --sb-warning: var(--c-warning);
+  --sb-danger: var(--c-danger);
+  --sb-surface: var(--c-surface);
+  --sb-surface-alt: var(--c-surface-alt);
+  --sb-text: var(--c-text);
+  --sb-text-muted: var(--c-text-muted);
+  --sb-border: var(--c-border);
+  --sb-progress-track: var(--c-border);
+  --sb-progress-fill: var(--c-accent);
+  --sb-font-family: var(--c-font-family);
+  --sb-font-size: 13px;
+  --sb-font-size-small: 0.85em;
+  --sb-font-size-label: 0.92em;
+  --sb-radius-panel: 10px;
+  --sb-radius-pill: 999px;
+}
+
+.sb-panel {
+  width: 100%;
+  max-width: 720px;
+  margin: 4px auto;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: var(--c-font-family);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+
+/* ===== 全局行：日期 | 时间 | 位置 ===== */
+.sb-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  background: var(--c-surface-alt);
+  border-bottom: 1px solid var(--c-border);
+  flex-wrap: wrap;
+}
+
+.sb-header-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.sb-header-icon {
+  font-size: 13px;
+}
+
+.sb-header-label {
+  font-size: 11px;
+  color: var(--c-text-muted);
+}
+
+.sb-header-value {
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.sb-header-place .sb-header-value {
+  color: var(--c-primary);
+}
+
+.sb-header-sep {
+  width: 1px;
+  height: 12px;
+  background: var(--c-border);
+}
+
+/* ===== 角色块 ===== */
+.sb-chars {
+  padding: 4px 0;
+}
+
+.sb-char {
+  border-left: 3px solid var(--c-primary);
+  margin: 4px 10px;
+  border-radius: 6px;
+  background: #fffdf8;
+}
+
+.sb-char.is-user {
+  border-left-color: var(--c-user-line);
+}
+
+.sb-char-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--c-text);
+  text-align: left;
+}
+
+.sb-char-head:hover {
+  background: var(--c-surface-alt);
+}
+
+.sb-chevron {
+  display: inline-block;
+  transition: transform 0.18s;
+  color: var(--c-text-muted);
+  font-size: 11px;
+}
+
+.sb-chevron.open {
+  transform: rotate(90deg);
+}
+
+.sb-char-emoji {
+  font-size: 14px;
+}
+
+.sb-char-name {
+  font-weight: 700;
+}
+
+.sb-char.is-user .sb-char-name {
+  color: #5b7ea6;
+}
+
+.sb-char-tag {
+  padding: 0 5px;
+  border-radius: 8px;
+  background: var(--c-user-line);
+  color: #fff;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.sb-char-count {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--c-text-muted);
+}
+
+.sb-char-body {
+  padding: 2px 10px 8px 28px;
+}
+
+/* ===== 字段行 ===== */
+.sb-field {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 0;
+  border-bottom: 1px dashed #f1e6d6;
+}
+
+.sb-field:last-child {
+  border-bottom: none;
+}
+
+.sb-field-emoji {
+  flex: none;
+  width: 16px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.sb-field-label {
+  flex: none;
+  width: 68px;
+  font-size: 11.5px;
+  color: var(--c-text-muted);
+}
+
+.sb-field-value {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* ===== 剧情发展（组件 scoped 样式见 PlotOptions.vue） ===== */
+

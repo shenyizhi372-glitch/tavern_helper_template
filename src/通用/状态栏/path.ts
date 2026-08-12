@@ -27,3 +27,27 @@ export function getByPath(data: unknown, path: string): unknown {
 export function isEmptyValue(value: unknown): boolean {
   return value === undefined || value === null || value === '';
 }
+
+/**
+ * 按点分路径写入值（用于交互组件写变量，写入后 defineMvuDataStore 自动双向同步）。
+ * 中间层不存在时自动创建对象；target 不可写时返回 false。
+ */
+export function setByPath(target: unknown, path: string, value: unknown): boolean {
+  if (target === null || target === undefined || typeof target !== 'object') {
+    return false;
+  }
+  const keys = path.split('.').filter(key => key !== '');
+  if (keys.length === 0) {
+    return false;
+  }
+  let current = target as Record<string, unknown>;
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
+    if (current[key] === null || current[key] === undefined || typeof current[key] !== 'object') {
+      current[key] = {};
+    }
+    current = current[key] as Record<string, unknown>;
+  }
+  current[keys[keys.length - 1]] = value;
+  return true;
+}

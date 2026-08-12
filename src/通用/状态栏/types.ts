@@ -97,7 +97,7 @@ export type ThemeOverride = {
 };
 
 /** 字段类型 */
-export type FieldType = 'text' | 'number' | 'progress' | 'enum' | 'stars';
+export type FieldType = 'text' | 'number' | 'progress' | 'enum' | 'stars' | 'image' | 'action' | 'choice' | 'slider' | 'input';
 
 /** 字段公共属性 */
 export interface FieldBase {
@@ -160,12 +160,129 @@ export interface StarsFieldConfig extends FieldBase {
   max?: number;
 }
 
+/* ==================== 交互与图片（V2 扩展） ==================== */
+
+/** 图片来源：三种方式（纯数据，可 JSON/YAML 表达） */
+export type ImageSource =
+  /** 固定 URL（如 CDN 直链） */
+  | { type: 'static'; url: string }
+  /** 按变量值查表映射：AI 只需维护 by 指向的键名，前端映射到图 */
+  | { type: 'mapped'; by: string; map: Record<string, string> }
+  /** 变量直接存 URL */
+  | { type: 'fromVariable'; path: string };
+
+/** 图片适应模式 */
+export type ImageFit = 'contain' | 'cover' | 'fill';
+
+/** 图片字段 */
+export interface ImageFieldConfig extends FieldBase {
+  type: 'image';
+  source: ImageSource;
+  /** 图片适应模式，默认 contain */
+  fit?: ImageFit;
+  /** 宽高比（如 '16/9'、'1/1'），未设置则按图片原始比例 */
+  ratio?: string;
+  /** 加载失败/无图时的占位文案，默认 🖼️ */
+  placeholder?: string;
+}
+
+/** 交互行为：写 MVU 变量（改 store.data → 自动双向同步） */
+export interface VariableAction {
+  mode: 'variable';
+  /** 目标路径（相对 stat_data，支持任意嵌套） */
+  path: string;
+  /** 数值增量（与 value 二选一；数值字段常用） */
+  delta?: number;
+  /** 直接设值（与 delta 二选一） */
+  value?: string | number | boolean;
+  /** 执行后的 toastr 提示文案（可选；无 toastr 环境静默） */
+  toast?: string;
+}
+
+/** 交互行为：作为用户消息发出并触发 AI */
+export interface MessageAction {
+  mode: 'message';
+  /** 作为用户消息发出的内容 */
+  content: string;
+  /** 触发斜杠，默认 '/trigger' */
+  slash?: string;
+  /** 成功后的 toastr 提示文案（可选） */
+  toast?: string;
+}
+
+export type FieldAction = VariableAction | MessageAction;
+
+/** 按钮字段 */
+export interface ActionFieldConfig extends FieldBase {
+  type: 'action';
+  action: FieldAction;
+}
+
+/** 选项组中的单个选项 */
+export interface ChoiceOption {
+  label: string;
+  icon?: string;
+  action: FieldAction;
+}
+
+/** 选项组字段（单选） */
+export interface ChoiceFieldConfig extends FieldBase {
+  type: 'choice';
+  options: ChoiceOption[];
+  /** 点击 message 型选项后是否禁用整组（防重复触发），默认 true */
+  lockAfterPick?: boolean;
+}
+
+/** 滑块字段（拖动写变量） */
+export interface SliderFieldConfig extends FieldBase {
+  type: 'slider';
+  /** 目标变量路径 */
+  path: string;
+  /** 下限，默认 0 */
+  min?: number;
+  /** 上限，默认 100 */
+  max?: number;
+  /** 步长，默认 1 */
+  step?: number;
+  /** 是否显示当前值，默认 true */
+  showValue?: boolean;
+  /** 写入防抖（毫秒），默认 300 */
+  debounce?: number;
+}
+
+/** 文本输入字段（提交写变量） */
+export interface InputFieldConfig extends FieldBase {
+  type: 'input';
+  /** 目标变量路径 */
+  path: string;
+  placeholder?: string;
+  /** 提交时机：enter=回车提交（默认）/ blur=失焦提交 / live=实时写入 */
+  commitOn?: 'enter' | 'blur' | 'live';
+  maxLength?: number;
+}
+
+/** 面板级图片（顶部立绘区 / 背景图） */
+export interface PanelImage {
+  id: string;
+  /** top=顶部立绘区；background=面板背景图 */
+  position: 'top' | 'background';
+  source: ImageSource;
+  fit?: ImageFit;
+  ratio?: string;
+  placeholder?: string;
+}
+
 export type FieldConfig =
   | TextFieldConfig
   | NumberFieldConfig
   | ProgressFieldConfig
   | EnumFieldConfig
-  | StarsFieldConfig;
+  | StarsFieldConfig
+  | ImageFieldConfig
+  | ActionFieldConfig
+  | ChoiceFieldConfig
+  | SliderFieldConfig
+  | InputFieldConfig;
 
 /** 分组区块 */
 export interface SectionConfig {
@@ -179,6 +296,13 @@ export interface SectionConfig {
   collapsible?: boolean;
   /** 默认是否折叠，默认 false */
   defaultCollapsed?: boolean;
+  /** 区块顶部配图（可选） */
+  image?: {
+    source: ImageSource;
+    fit?: ImageFit;
+    ratio?: string;
+    placeholder?: string;
+  };
   fields: FieldConfig[];
 }
 
@@ -186,5 +310,7 @@ export interface SectionConfig {
 export interface StatusBarConfig {
   /** 顶部标题，省略则不显示 */
   title?: string;
+  /** 面板级图片（顶部立绘区 / 背景图），按声明顺序渲染 */
+  images?: PanelImage[];
   sections: SectionConfig[];
 }

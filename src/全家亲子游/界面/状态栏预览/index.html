@@ -1,0 +1,53 @@
+<head>
+  <!-- 预览专用：模拟酒馆助手预注入的全局变量（生产环境由酒馆助手注入，无需这些） -->
+  <script src="https://testingcf.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/vue@3.5.41/dist/vue.global.prod.js"></script>
+  <link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" />
+  <script src="https://testingcf.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 16px;
+      background: #ece3d6;
+      font-family: 'Microsoft YaHei', system-ui, sans-serif;
+    }
+    #err {
+      display: none;
+      position: fixed;
+      left: 8px;
+      right: 8px;
+      top: 8px;
+      z-index: 999;
+      padding: 10px;
+      background: #ffe9e9;
+      border: 1px solid #d33;
+      color: #a00;
+      font: 12px/1.6 monospace;
+      white-space: pre-wrap;
+    }
+    .preview-note {
+      max-width: 720px;
+      margin: 18px auto 6px;
+      font-size: 12px;
+      color: #8a7d6d;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="err"></div>
+  <div id="app"></div>
+  <script>
+    // 预览调试：把运行期错误显示在页面上（预览专用）
+    window.addEventListener('error', function (e) {
+      var el = document.getElementById('err');
+      el.style.display = 'block';
+      el.textContent = '[error] ' + e.message + '\n' + (e.error && e.error.stack ? e.error.stack : '');
+    });
+    window.addEventListener('unhandledrejection', function (e) {
+      var el = document.getElementById('err');
+      el.style.display = 'block';
+      el.textContent = '[unhandledrejection] ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason));
+    });
+  </script>
+</body>

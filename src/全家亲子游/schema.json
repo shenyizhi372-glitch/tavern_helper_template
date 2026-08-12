@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "系统": {
+      "type": "object",
+      "properties": {
+        "日期": {
+          "default": "",
+          "type": "string"
+        },
+        "时间": {
+          "default": "",
+          "type": "string"
+        },
+        "地点": {
+          "default": "家·客厅",
+          "type": "string"
+        }
+      }
+    },
+    "角色": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "表情": {
+            "default": "👤",
+            "type": "string"
+          },
+          "_用户": {
+            "default": false,
+            "type": "boolean"
+          },
+          "穿着": {
+            "default": "",
+            "type": "string"
+          },
+          "神态": {
+            "default": "",
+            "type": "string"
+          },
+          "心情": {
+            "default": "",
+            "type": "string"
+          },
+          "当前行动": {
+            "default": "",
+            "type": "string"
+          },
+          "好感度": {
+            "default": 50,
+            "type": "number"
+          }
+        }
+      }
+    },
+    "剧情": {
+      "type": "object",
+      "properties": {
+        "当前事件": {
+          "default": "",
+          "type": "string"
+        },
+        "可选发展": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "default": "正常",
+                "type": "string"
+              },
+              "text": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "系统",
+    "角色",
+    "剧情"
+  ]
+}

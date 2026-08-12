@@ -13,6 +13,43 @@ const enumStyleSchema = z.object({
   icon: z.string().optional(),
 });
 
+const imageSourceSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('static'), url: z.string().min(1, 'static 图片 url 不能为空') }),
+  z.object({ type: z.literal('mapped'), by: z.string().min(1), map: z.record(z.string(), z.string().min(1)) }),
+  z.object({ type: z.literal('fromVariable'), path: z.string().min(1) }),
+]);
+
+const imageStyleFields = {
+  source: imageSourceSchema,
+  fit: z.enum(['contain', 'cover', 'fill']).optional(),
+  ratio: z.string().optional(),
+  placeholder: z.string().optional(),
+};
+const imageStyleSchema = z.object(imageStyleFields);
+
+const variableActionSchema = z.object({
+  mode: z.literal('variable'),
+  path: z.string().min(1, 'variable 行为 path 不能为空'),
+  delta: z.number().optional(),
+  value: z.union([z.string(), z.number(), z.boolean()]).optional(),
+  toast: z.string().optional(),
+});
+
+const messageActionSchema = z.object({
+  mode: z.literal('message'),
+  content: z.string().min(1, 'message 行为 content 不能为空'),
+  slash: z.string().optional(),
+  toast: z.string().optional(),
+});
+
+const fieldActionSchema = z.discriminatedUnion('mode', [variableActionSchema, messageActionSchema]);
+
+const choiceOptionSchema = z.object({
+  label: z.string().min(1, '选项 label 不能为空'),
+  icon: z.string().optional(),
+  action: fieldActionSchema,
+});
+
 const fieldBaseSchema = {
   path: z.string().min(1, 'field.path 不能为空'),
   label: z.string().min(1, 'field.label 不能为空'),
@@ -37,7 +74,39 @@ const fieldSchema = z.discriminatedUnion('type', [
   }),
   z.object({ ...fieldBaseSchema, type: z.literal('enum'), mapping: z.record(z.string(), enumStyleSchema) }),
   z.object({ ...fieldBaseSchema, type: z.literal('stars'), max: z.number().positive().optional() }),
+  z.object({ ...fieldBaseSchema, type: z.literal('image'), ...imageStyleFields }),
+  z.object({ ...fieldBaseSchema, type: z.literal('action'), action: fieldActionSchema }),
+  z.object({
+    ...fieldBaseSchema,
+    type: z.literal('choice'),
+    options: z.array(choiceOptionSchema).min(1, 'choice 至少需要一个选项'),
+    lockAfterPick: z.boolean().optional(),
+  }),
+  z.object({
+    ...fieldBaseSchema,
+    type: z.literal('slider'),
+    path: z.string().min(1, 'slider path 不能为空'),
+    min: z.number().optional(),
+    max: z.number().optional(),
+    step: z.number().positive().optional(),
+    showValue: z.boolean().optional(),
+    debounce: z.number().nonnegative().optional(),
+  }),
+  z.object({
+    ...fieldBaseSchema,
+    type: z.literal('input'),
+    path: z.string().min(1, 'input path 不能为空'),
+    placeholder: z.string().optional(),
+    commitOn: z.enum(['enter', 'blur', 'live']).optional(),
+    maxLength: z.number().nonnegative().optional(),
+  }),
 ]);
+
+const panelImageSchema = z.object({
+  id: z.string().min(1, '图片 id 不能为空'),
+  position: z.enum(['top', 'background']),
+  ...imageStyleFields,
+});
 
 const sectionSchema = z.object({
   id: z.string().min(1, 'section.id 不能为空'),
@@ -45,11 +114,13 @@ const sectionSchema = z.object({
   icon: z.string().optional(),
   collapsible: z.boolean().optional(),
   defaultCollapsed: z.boolean().optional(),
+  image: imageStyleSchema.optional(),
   fields: z.array(fieldSchema).min(1, 'section.fields 至少需要一个字段'),
 });
 
 const configSchema = z.object({
   title: z.string().optional(),
+  images: z.array(panelImageSchema).optional(),
   sections: z.array(sectionSchema).min(1, 'sections 至少需要一个区块'),
 });
 
