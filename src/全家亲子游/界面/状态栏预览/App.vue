@@ -4,11 +4,13 @@
       ▼ 全家亲子游 MVU 版（好感度调节需密钥解锁；右上 ⚙️ 打开设置：主题/字号/立绘/图鉴）
     </div>
     <div class="status-root" :class="{ 'is-blurred': settingsOpen }">
-      <div class="sb-topbar">
-        <span class="sb-topbar-title">🏡 全家亲子游</span>
-        <SettingsButton @click="settingsOpen = true" />
-      </div>
-      <StatusPanel ref="panelRef" :data="mock.data" :store="mock" :gallery="galleryState" />
+      <StatusPanel
+        ref="panelRef"
+        title="🏡 全家亲子游"
+        :data="mock.data"
+        :store="mock"
+        :gallery="galleryState"
+      />
       <SettingsModal
         v-model="settingsOpen"
         :gallery="galleryState"
@@ -29,7 +31,6 @@ import { computed, provide, reactive, ref } from 'vue';
 import type { Schema } from '../../schema';
 import type { CharacterGallery, GalleryConfig } from '../../../通用/状态栏/types';
 import StatusPanel from '../状态栏/components/StatusPanel.vue';
-import SettingsButton from '../../../通用/状态栏/components/SettingsButton.vue';
 import SettingsModal from '../../../通用/状态栏/components/SettingsModal.vue';
 import { useSettings } from '../../../通用/状态栏/useSettings';
 import { gallery, settings } from '../状态栏/gallery';
@@ -197,21 +198,5 @@ const cssVars = computed(() => {
   font-size: 12px;
   color: #8a7d6d;
   text-align: center;
-}
-
-.sb-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 720px;
-  margin: 0 auto 4px;
-  padding: 2px 6px;
-}
-
-.sb-topbar-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--c-text-muted);
-  letter-spacing: 0.15em;
 }
 </style>

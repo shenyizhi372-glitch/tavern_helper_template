@@ -1,6 +1,7 @@
 <template>
   <VueFinalModal v-model="open" :click-to-close="true" class="sb-settings-vfm">
-    <div class="sb-settings">
+    <!-- :style 应用主题变量：弹窗 teleport 到 body，拿不到 .status-root 上的 --sb-*，需在此补上才能跟随主题 -->
+    <div class="sb-settings" :style="state.themeStyle.value">
       <div class="sb-settings-head">
         <span class="sb-settings-title">⚙️ 设置</span>
         <button class="sb-settings-close" type="button" @click="open = false">✕</button>

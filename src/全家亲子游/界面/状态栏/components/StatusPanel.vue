@@ -1,5 +1,11 @@
 <template>
   <div class="sb-panel">
+    <!-- 面板头部行：标题 + 设置（设置按钮位于面板内，导入酒馆后不丢失） -->
+    <div class="sb-panel-head">
+      <span class="sb-panel-title">{{ title }}</span>
+      <SettingsButton @click="openSettings('appearance')" />
+    </div>
+
     <!-- 多角色切换（仅配置了多个角色时显示） -->
     <div v-if="gallery && gallery.characters.length > 1" class="sb-role-tabs">
       <button
@@ -15,6 +21,9 @@
       </button>
     </div>
 
+    <!-- 日期/时间/位置：面板顶部整行（立绘图片上方） -->
+    <HeaderRow :data="data.系统" />
+
     <div class="sb-layout">
       <!-- 左侧：当前角色立绘（宽度由「立绘大小」设置控制） -->
       <div v-if="heroineGallery" class="sb-portrait" :style="{ width: portraitWidth }">
@@ -26,7 +35,6 @@
       </div>
       <!-- 右侧：状态信息 -->
       <div class="sb-info">
-        <HeaderRow :data="data.系统" />
         <div class="sb-chars">
           <CharSection
             v-for="(char, name) in visibleChars"
@@ -53,8 +61,11 @@ import CharSection from './CharSection.vue';
 import HeaderRow from './HeaderRow.vue';
 import PlotOptions from './PlotOptions.vue';
 import StageImage from '../../../../通用/状态栏/components/StageImage.vue';
+import SettingsButton from '../../../../通用/状态栏/components/SettingsButton.vue';
 
 const props = defineProps<{
+  /** 面板标题（如 🏡 全家亲子游） */
+  title?: string;
   data: Schema;
   store: { data: Schema };
   /** 图鉴配置（多角色切换用；缺省时退化为第一组） */
@@ -63,6 +74,12 @@ const props = defineProps<{
 
 /** 密钥解锁记录（由 App 注入 useSettings 的 keys） */
 const keys = inject<{ value: string[] }>('sbKeys', { value: [] });
+
+/** 打开设置弹窗并切到指定 tab（由 App 注入） */
+const openSettings = inject<(tab: 'appearance' | 'gallery' | 'gallery-manage') => void>(
+  'sbOpenSettings',
+  () => undefined,
+);
 
 /** 立绘宽度设置（由 App 注入 useSettings 的 portrait，默认 140） */
 const portrait = inject<{ value: number }>('sbPortrait', { value: 140 });
@@ -107,12 +124,27 @@ function imageUnlockedOf(image: StageImageType): boolean {
 </script>
 
 <style scoped>
+/* 面板头部行：标题 + 设置按钮 */
+.sb-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 0;
+}
+
+.sb-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-text-muted);
+  letter-spacing: 0.15em;
+}
+
 /* 多角色切换 tab */
 .sb-role-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  padding: 8px 10px 0;
+  padding: 6px 10px 0;
 }
 
 .sb-role-tab {

@@ -1,12 +1,9 @@
 <template>
   <div class="status-root" :class="{ 'is-blurred': settingsOpen }" :style="cssVars">
-    <div class="sb-topbar">
-      <span class="sb-topbar-title">🏡 全家亲子游</span>
-      <SettingsButton @click="settingsOpen = true" />
-    </div>
     <StatusPanel
       ref="panelRef"
       v-if="store.data"
+      title="🏡 全家亲子游"
       :data="store.data"
       :store="store"
       :gallery="galleryState"
@@ -29,7 +26,6 @@
 import { computed, provide, reactive, ref } from 'vue';
 import type { GalleryConfig } from '../../../通用/状态栏/types';
 import StatusPanel from './components/StatusPanel.vue';
-import SettingsButton from '../../../通用/状态栏/components/SettingsButton.vue';
 import SettingsModal from '../../../通用/状态栏/components/SettingsModal.vue';
 import { useSettings } from '../../../通用/状态栏/useSettings';
 import { useDataStore } from './store';
@@ -126,22 +122,6 @@ const cssVars = computed(() => {
 
 .status-root {
   width: 100%;
-}
-
-.sb-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 720px;
-  margin: 0 auto 4px;
-  padding: 2px 6px;
-}
-
-.sb-topbar-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--c-text-muted);
-  letter-spacing: 0.15em;
 }
 
 .status-missing {
