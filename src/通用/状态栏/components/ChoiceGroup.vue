@@ -1,29 +1,38 @@
 <template>
   <span class="sb-choice">
-    <button
-      v-for="(option, index) in field.options"
-      :key="option.label"
-      class="sb-choice-opt"
-      type="button"
-      :disabled="locked || busyIndex !== null"
-      @click="pick(option, index)"
-    >
-      <SbIcon v-if="option.icon" :icon="option.icon" />
-      <span>{{ option.label }}</span>
-    </button>
+    <LockInput v-if="lockLocked" :lock="field.lock" />
+    <template v-else>
+      <button
+        v-for="(option, index) in field.options"
+        :key="option.label"
+        class="sb-choice-opt"
+        type="button"
+        :disabled="locked || busyIndex !== null"
+        @click="pick(option, index)"
+      >
+        <SbIcon v-if="option.icon" :icon="option.icon" />
+        <span>{{ option.label }}</span>
+      </button>
+    </template>
   </span>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import type { ChoiceFieldConfig } from '../types';
 import { getByPath, setByPath } from '../path';
 import SbIcon from './SbIcon.vue';
+import LockInput from './LockInput.vue';
 
 const props = defineProps<{
   field: ChoiceFieldConfig;
   store?: { data: unknown };
 }>();
+
+/** 密钥解锁记录（由 App 注入 useSettings 的 keys） */
+const keys = inject<{ value: string[] }>('sbKeys', { value: [] });
+
+const lockLocked = computed(() => !!props.field.lock && !keys.value.includes(props.field.lock.key));
 
 /** message 型选项被点击后整组锁定（防重复触发） */
 const locked = ref(false);

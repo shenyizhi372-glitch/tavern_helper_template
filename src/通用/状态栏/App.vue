@@ -1,6 +1,13 @@
 <template>
-  <div class="sb-status-bar" :style="[themeStyle, bgStyle]">
-    <div v-if="config.title" class="sb-title">{{ config.title }}</div>
+  <div class="sb-status-bar" :style="rootStyle">
+    <div class="sb-headbar">
+      <div v-if="config.title" class="sb-title">{{ config.title }}</div>
+      <SettingsButton
+        v-if="hasSettings"
+        class="sb-headbar-settings"
+        @click="settingsOpen = true"
+      />
+    </div>
     <StatImage
       v-for="image in topImages"
       :key="image.id"
@@ -18,17 +25,26 @@
       :data="data"
       :store="store"
     />
+    <SettingsModal
+      v-model="settingsOpen"
+      :gallery="config.gallery"
+      :settings="config.settings"
+      :data="data"
+      :state="state"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, provide } from 'vue';
+import { computed, provide, ref, watch } from 'vue';
 import type { StatusBarConfig, ThemeOverride } from './types';
-import { defaultTheme, mergeTheme, themeToCssVars } from './theme';
 import { normalizeStatusBarConfig } from './config.schema';
 import { resolveImageSource } from './image';
+import { useSettings } from './useSettings';
 import StatusSection from './components/StatusSection.vue';
 import StatImage from './components/StatImage.vue';
+import SettingsButton from './components/SettingsButton.vue';
+import SettingsModal from './components/SettingsModal.vue';
 import './global.css';
 
 const props = defineProps<{
@@ -44,12 +60,24 @@ const props = defineProps<{
 
 const normalized = computed(() => normalizeStatusBarConfig(props.config));
 
-const mergedTheme = computed(() => mergeTheme(defaultTheme, props.theme));
+/** 设置与解锁状态（localStorage 持久化：主题/字号/密度/密钥/解锁记录） */
+const state = useSettings(props.config.gallery, props.config.settings);
 
 /** 供子组件读取主题配置（分隔字符、括号等） */
-provide('sbTheme', mergedTheme);
+provide('sbTheme', state.mergedTheme);
 
-const themeStyle = computed(() => themeToCssVars(mergedTheme.value));
+/** 供交互组件读取密钥解锁记录 */
+provide('sbKeys', state.keys);
+
+/** 条件达成的图标记永久解锁（数据变化时同步） */
+watch(
+  () => props.data,
+  () => state.syncUnlocked(props.data),
+  { immediate: true },
+);
+
+const settingsOpen = ref(false);
+const hasSettings = computed(() => !!props.config.gallery || !!props.config.settings);
 
 const topImages = computed(() => (props.config.images ?? []).filter(image => image.position === 'top'));
 
@@ -61,15 +89,22 @@ const bgStyle = computed(() => {
   const url = resolveImageSource(bg.source, props.data);
   return url ? { backgroundImage: `url("${url}")` } : undefined;
 });
+
+/** 根节点样式：主题变量 + 背景图 */
+const rootStyle = computed(() => ({ ...state.themeStyle.value, ...(bgStyle.value ?? {}) }));
 </script>
 
 <style scoped>
-.sb-panel-image {
-  margin-bottom: var(--sb-gap-section);
+.sb-headbar {
+  position: relative;
 }
-</style>
 
-<style scoped>
+.sb-headbar-settings {
+  position: absolute;
+  top: 0.15em;
+  right: 0.15em;
+}
+
 .sb-title {
   padding: 0.4em 0.7em;
   margin-bottom: var(--sb-gap-section);
@@ -79,5 +114,9 @@ const bgStyle = computed(() => {
   font-weight: 700;
   text-align: center;
   letter-spacing: 0.2em;
+}
+
+.sb-panel-image {
+  margin-bottom: var(--sb-gap-section);
 }
 </style>

@@ -216,6 +216,8 @@ export type FieldAction = VariableAction | MessageAction;
 export interface ActionFieldConfig extends FieldBase {
   type: 'action';
   action: FieldAction;
+  /** 字段锁：输入密钥解锁后可交互 */
+  lock?: FieldLock;
 }
 
 /** 选项组中的单个选项 */
@@ -231,6 +233,8 @@ export interface ChoiceFieldConfig extends FieldBase {
   options: ChoiceOption[];
   /** 点击 message 型选项后是否禁用整组（防重复触发），默认 true */
   lockAfterPick?: boolean;
+  /** 字段锁：输入密钥解锁后可交互 */
+  lock?: FieldLock;
 }
 
 /** 滑块字段（拖动写变量） */
@@ -248,6 +252,8 @@ export interface SliderFieldConfig extends FieldBase {
   showValue?: boolean;
   /** 写入防抖（毫秒），默认 300 */
   debounce?: number;
+  /** 字段锁：输入密钥解锁后可交互 */
+  lock?: FieldLock;
 }
 
 /** 文本输入字段（提交写变量） */
@@ -259,6 +265,8 @@ export interface InputFieldConfig extends FieldBase {
   /** 提交时机：enter=回车提交（默认）/ blur=失焦提交 / live=实时写入 */
   commitOn?: 'enter' | 'blur' | 'live';
   maxLength?: number;
+  /** 字段锁：输入密钥解锁后可交互 */
+  lock?: FieldLock;
 }
 
 /** 面板级图片（顶部立绘区 / 背景图） */
@@ -270,6 +278,63 @@ export interface PanelImage {
   fit?: ImageFit;
   ratio?: string;
   placeholder?: string;
+}
+
+/* ==================== 图鉴 / 设置 / 字段锁（V3 扩展） ==================== */
+
+/** 解锁条件（纯数据，可 JSON/YAML）：threshold 阈值 / equals 等值 / all 且 / any 或 */
+export type UnlockCondition =
+  | { type: 'threshold'; variable: string; min?: number; max?: number }
+  | { type: 'equals'; variable: string; value: string | number | boolean }
+  | { type: 'all'; conditions: UnlockCondition[] }
+  | { type: 'any'; conditions: UnlockCondition[] };
+
+/** 一张阶段图 */
+export interface StageImage {
+  id: string;
+  /** 阶段展示名（如 日常 / 亲昵 / 沉沦） */
+  label: string;
+  /** 静态图 URL（CDN） */
+  url: string;
+  /** 解锁条件；省略 = 默认解锁 */
+  unlock?: UnlockCondition;
+  /** 单图密钥：输入匹配即解锁此图 */
+  key?: string;
+}
+
+/** 角色图集（人物立绘分阶段） */
+export interface CharacterGallery {
+  id: string;
+  name: string;
+  icon?: string;
+  images: StageImage[];
+}
+
+/** 图鉴配置（面板级） */
+export interface GalleryConfig {
+  characters: CharacterGallery[];
+  /** 全局密钥：输入匹配则解锁全部图鉴（与字段锁共用同一密钥记录） */
+  masterKey?: string;
+}
+
+/** 主题预设（设置界面切换用） */
+export interface ThemePreset {
+  id: string;
+  label: string;
+  theme: ThemeOverride;
+}
+
+/** 设置配置 */
+export interface SettingsConfig {
+  /** 项目自定义主题预设（内置三套之外追加） */
+  themePresets?: ThemePreset[];
+}
+
+/** 字段锁：输入密钥解锁后控件才可交互 */
+export interface FieldLock {
+  key: string;
+  /** 锁定提示文案（如 输入密钥后可调整） */
+  hint?: string;
 }
 
 export type FieldConfig =
@@ -312,5 +377,9 @@ export interface StatusBarConfig {
   title?: string;
   /** 面板级图片（顶部立绘区 / 背景图），按声明顺序渲染 */
   images?: PanelImage[];
+  /** 图鉴配置（人物立绘分阶段 + 解锁 + 密钥），开启设置界面的图鉴 tab */
+  gallery?: GalleryConfig;
+  /** 设置配置（自定义主题预设等） */
+  settings?: SettingsConfig;
   sections: SectionConfig[];
 }

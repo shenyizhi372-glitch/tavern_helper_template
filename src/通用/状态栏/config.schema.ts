@@ -5,7 +5,7 @@
  * 用 parseStatusBarConfig 校验并填充默认值。
  */
 import { z } from 'zod';
-import type { FieldConfig, SectionConfig, StatusBarConfig } from './types';
+import type { FieldConfig, SectionConfig, StatusBarConfig, UnlockCondition } from './types';
 
 const enumStyleSchema = z.object({
   label: z.string().optional(),
@@ -50,6 +50,11 @@ const choiceOptionSchema = z.object({
   action: fieldActionSchema,
 });
 
+const fieldLockSchema = z.object({
+  key: z.string().min(1, '锁密钥不能为空'),
+  hint: z.string().optional(),
+});
+
 const fieldBaseSchema = {
   path: z.string().min(1, 'field.path 不能为空'),
   label: z.string().min(1, 'field.label 不能为空'),
@@ -75,12 +80,13 @@ const fieldSchema = z.discriminatedUnion('type', [
   z.object({ ...fieldBaseSchema, type: z.literal('enum'), mapping: z.record(z.string(), enumStyleSchema) }),
   z.object({ ...fieldBaseSchema, type: z.literal('stars'), max: z.number().positive().optional() }),
   z.object({ ...fieldBaseSchema, type: z.literal('image'), ...imageStyleFields }),
-  z.object({ ...fieldBaseSchema, type: z.literal('action'), action: fieldActionSchema }),
+  z.object({ ...fieldBaseSchema, type: z.literal('action'), action: fieldActionSchema, lock: fieldLockSchema.optional() }),
   z.object({
     ...fieldBaseSchema,
     type: z.literal('choice'),
     options: z.array(choiceOptionSchema).min(1, 'choice 至少需要一个选项'),
     lockAfterPick: z.boolean().optional(),
+    lock: fieldLockSchema.optional(),
   }),
   z.object({
     ...fieldBaseSchema,
@@ -91,6 +97,7 @@ const fieldSchema = z.discriminatedUnion('type', [
     step: z.number().positive().optional(),
     showValue: z.boolean().optional(),
     debounce: z.number().nonnegative().optional(),
+    lock: fieldLockSchema.optional(),
   }),
   z.object({
     ...fieldBaseSchema,
@@ -99,6 +106,7 @@ const fieldSchema = z.discriminatedUnion('type', [
     placeholder: z.string().optional(),
     commitOn: z.enum(['enter', 'blur', 'live']).optional(),
     maxLength: z.number().nonnegative().optional(),
+    lock: fieldLockSchema.optional(),
   }),
 ]);
 
@@ -106,6 +114,56 @@ const panelImageSchema = z.object({
   id: z.string().min(1, '图片 id 不能为空'),
   position: z.enum(['top', 'background']),
   ...imageStyleFields,
+});
+
+/* ===== 图鉴 / 设置 / 字段锁 ===== */
+
+const unlockConditionSchema: z.ZodType<UnlockCondition> = z.lazy(() =>
+  z.discriminatedUnion('type', [
+    z.object({
+      type: z.literal('threshold'),
+      variable: z.string().min(1),
+      min: z.number().optional(),
+      max: z.number().optional(),
+    }),
+    z.object({
+      type: z.literal('equals'),
+      variable: z.string().min(1),
+      value: z.union([z.string(), z.number(), z.boolean()]),
+    }),
+    z.object({ type: z.literal('all'), conditions: z.array(unlockConditionSchema).min(1) }),
+    z.object({ type: z.literal('any'), conditions: z.array(unlockConditionSchema).min(1) }),
+  ]),
+);
+
+const stageImageSchema = z.object({
+  id: z.string().min(1, '图片 id 不能为空'),
+  label: z.string().min(1, '阶段名不能为空'),
+  url: z.string().min(1, '图片 url 不能为空'),
+  unlock: unlockConditionSchema.optional(),
+  key: z.string().optional(),
+});
+
+const characterGallerySchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  icon: z.string().optional(),
+  images: z.array(stageImageSchema).min(1),
+});
+
+const gallerySchema = z.object({
+  characters: z.array(characterGallerySchema).min(1),
+  masterKey: z.string().optional(),
+});
+
+const themePresetSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  theme: z.record(z.string(), z.unknown()).optional(), // ThemeOverride 结构宽松校验
+});
+
+const settingsSchema = z.object({
+  themePresets: z.array(themePresetSchema).optional(),
 });
 
 const sectionSchema = z.object({
@@ -121,6 +179,8 @@ const sectionSchema = z.object({
 const configSchema = z.object({
   title: z.string().optional(),
   images: z.array(panelImageSchema).optional(),
+  gallery: gallerySchema.optional(),
+  settings: settingsSchema.optional(),
   sections: z.array(sectionSchema).min(1, 'sections 至少需要一个区块'),
 });
 

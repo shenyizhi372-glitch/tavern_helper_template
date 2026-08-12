@@ -9,10 +9,10 @@
  * 具体风格后续再定，扩展点：新增主题配置键时，在 ThemeOverride 与
  * themeToCssVars 中同步补充即可。
  */
-import type { Density, StatusBarTheme, ThemeOverride } from './types';
+import type { Density, StatusBarTheme, ThemeOverride, ThemePreset } from './types';
 
 /** 密度 → 基础字号（组件内部使用 em，随密度整体缩放） */
-const DENSITY_FONT_SIZES: Record<Density, string> = {
+export const DENSITY_FONT_SIZES: Record<Density, string> = {
   compact: '12px',
   normal: '13.5px',
   comfortable: '15px',
@@ -100,3 +100,50 @@ export function themeToCssVars(theme: StatusBarTheme): Record<string, string> {
     '--sb-gap-section': spacing.sectionGap,
   };
 }
+
+/** 内置主题预设（设置界面切换用；'default' 即宝可梦卡默认主题） */
+export const presetThemes: ThemePreset[] = [
+  {
+    id: 'family',
+    label: '温馨家庭',
+    theme: {
+      colors: {
+        primary: '#b0714f',
+        accent: '#d98f8f',
+        success: '#7fa57f',
+        warning: '#d9a441',
+        danger: '#c05252',
+        surface: '#fffaf3',
+        surfaceAlt: '#f7efe2',
+        text: '#4d4138',
+        textMuted: '#a4937f',
+        border: '#e9dcc9',
+        progressTrack: '#e9dcc9',
+        progressFill: '#d98f8f',
+      },
+      font: { family: `'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif` },
+    },
+  },
+  {
+    id: 'night',
+    label: '暗色夜行',
+    theme: {
+      colors: {
+        primary: '#9d7bd8',
+        accent: '#e07bd0',
+        success: '#7fc98a',
+        warning: '#d9b45c',
+        danger: '#e06060',
+        surface: '#23212b',
+        surfaceAlt: '#2e2b3a',
+        text: '#e8e4f0',
+        textMuted: '#9a93ad',
+        border: '#433e54',
+        progressTrack: '#3a3550',
+        progressFill: '#9d7bd8',
+      },
+      font: { family: `-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif` },
+      radius: { panel: '12px' },
+    },
+  },
+];

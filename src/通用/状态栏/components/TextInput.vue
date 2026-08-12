@@ -1,24 +1,34 @@
 <template>
-  <input
-    class="sb-input"
-    type="text"
-    :placeholder="field.placeholder"
-    :maxlength="field.maxLength"
-    v-model="text"
-    @keyup.enter="onCommit"
-    @blur="onBlurCommit"
-  />
+  <span class="sb-input-wrap">
+    <LockInput v-if="lockLocked" :lock="field.lock" />
+    <input
+      v-else
+      class="sb-input"
+      type="text"
+      :placeholder="field.placeholder"
+      :maxlength="field.maxLength"
+      v-model="text"
+      @keyup.enter="onCommit"
+      @blur="onBlurCommit"
+    />
+  </span>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import type { InputFieldConfig } from '../types';
 import { setByPath } from '../path';
+import LockInput from './LockInput.vue';
 
 const props = defineProps<{
   field: InputFieldConfig;
   store?: { data: unknown };
 }>();
+
+/** 密钥解锁记录（由 App 注入 useSettings 的 keys） */
+const keys = inject<{ value: string[] }>('sbKeys', { value: [] });
+
+const lockLocked = computed(() => !!props.field.lock && !keys.value.includes(props.field.lock.key));
 
 const text = ref('');
 

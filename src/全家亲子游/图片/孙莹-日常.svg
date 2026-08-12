@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 400">
+  <rect width="320" height="400" fill="#fdf9f0"/>
+  <rect x="14" y="14" width="292" height="372" rx="18" fill="#fffdf8" stroke="#e2d4bc" stroke-width="2"/>
+  <text x="160" y="190" font-size="150" text-anchor="middle">👩</text>
+  <text x="160" y="310" font-size="24" text-anchor="middle" fill="#8a7560" font-family="Microsoft YaHei, PingFang SC, sans-serif">日常 · 温柔的母亲</text>
+</svg>

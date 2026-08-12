@@ -1,27 +1,36 @@
 <template>
   <span class="sb-slider">
-    <input
-      class="sb-slider-input"
-      type="range"
-      :min="min"
-      :max="max"
-      :step="step"
-      :value="currentValue"
-      @input="onInput"
-    />
-    <span v-if="field.showValue !== false" class="sb-slider-value">{{ displayValue }}</span>
+    <LockInput v-if="lockLocked" :lock="field.lock" />
+    <template v-else>
+      <input
+        class="sb-slider-input"
+        type="range"
+        :min="min"
+        :max="max"
+        :step="step"
+        :value="currentValue"
+        @input="onInput"
+      />
+      <span v-if="field.showValue !== false" class="sb-slider-value">{{ displayValue }}</span>
+    </template>
   </span>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import type { SliderFieldConfig } from '../types';
 import { getByPath, setByPath } from '../path';
+import LockInput from './LockInput.vue';
 
 const props = defineProps<{
   field: SliderFieldConfig;
   store?: { data: unknown };
 }>();
+
+/** 密钥解锁记录（由 App 注入 useSettings 的 keys） */
+const keys = inject<{ value: string[] }>('sbKeys', { value: [] });
+
+const lockLocked = computed(() => !!props.field.lock && !keys.value.includes(props.field.lock.key));
 
 const min = computed(() => props.field.min ?? 0);
 const max = computed(() => props.field.max ?? 100);

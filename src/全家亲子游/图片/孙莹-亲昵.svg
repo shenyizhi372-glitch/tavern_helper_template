@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 400">
+  <rect width="320" height="400" fill="#fdeef2"/>
+  <rect x="14" y="14" width="292" height="372" rx="18" fill="#fff6f9" stroke="#eec4cf" stroke-width="2"/>
+  <text x="160" y="190" font-size="150" text-anchor="middle">💞</text>
+  <text x="160" y="310" font-size="24" text-anchor="middle" fill="#a96a7d" font-family="Microsoft YaHei, PingFang SC, sans-serif">亲昵 · 心跳加速</text>
+</svg>

@@ -36,8 +36,11 @@
         </span>
         <span class="sb-affinity-value">{{ affinity }}</span>
         <span class="sb-affinity-controls">
-          <button class="sb-affinity-btn" type="button" :disabled="affinity <= 0" @click="adjust(-5)">-</button>
-          <button class="sb-affinity-btn" type="button" :disabled="affinity >= 100" @click="adjust(5)">+</button>
+          <LockInput v-if="lockLocked" :lock="affinityLock" />
+          <template v-else>
+            <button class="sb-affinity-btn" type="button" :disabled="affinity <= 0" @click="adjust(-5)">-</button>
+            <button class="sb-affinity-btn" type="button" :disabled="affinity >= 100" @click="adjust(5)">+</button>
+          </template>
         </span>
       </div>
     </div>
@@ -45,8 +48,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import type { Schema } from '../../../schema';
+import LockInput from '../../../../通用/状态栏/components/LockInput.vue';
+import { affinityLock } from '../gallery';
 
 const props = defineProps<{
   name: string;
@@ -54,6 +59,12 @@ const props = defineProps<{
   /** 数据存储：改 store.data 后 defineMvuDataStore 自动写回楼层变量 */
   store: { data: Schema };
 }>();
+
+/** 密钥解锁记录（由 App 注入 useSettings 的 keys） */
+const keys = inject<{ value: string[] }>('sbKeys', { value: [] });
+
+/** 好感度调节锁定：输入家庭密钥解锁后可调 */
+const lockLocked = computed(() => !keys.value.includes(affinityLock.key));
 
 // 默认展开（与穿花蝶传一致），点击表头折叠
 const open = ref(true);
