@@ -93,26 +93,41 @@
         />
         <div v-else class="sb-settings-empty">本卡未配置图鉴</div>
       </div>
+
+      <!-- 图鉴管理（作者调试） -->
+      <div v-show="activeTab === 'gallery-manage'" class="sb-settings-body">
+        <GalleryEditor
+          v-if="galleryEditable && gallery"
+          :gallery="gallery"
+          :original="originalGallery"
+        />
+        <div v-else class="sb-settings-empty">本卡未启用图鉴管理</div>
+      </div>
     </div>
   </VueFinalModal>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, inject, nextTick, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
 import { VueFinalModal } from 'vue-final-modal';
 import type { GalleryConfig, SettingsConfig } from '../types';
 import type { SettingsState } from '../useSettings';
 import GalleryPanel from './GalleryPanel.vue';
+import GalleryEditor from './GalleryEditor.vue';
 
 const props = defineProps<{
   modelValue: boolean;
   gallery?: GalleryConfig;
+  /** 代码里的原始图鉴配置（图鉴管理「重置」用） */
+  originalGallery?: GalleryConfig;
   settings?: SettingsConfig;
   data: unknown;
   /** useSettings 状态（由入口 App 创建后传入） */
   state: SettingsState;
   /** 弹窗锚点：返回状态栏面板元素（如 .sb-panel）；缺省时弹窗居中于视口 */
   getAnchor?: () => HTMLElement | null;
+  /** 启用「图鉴管理」编辑 tab（作者调试用；gallery 需为可变响应式对象） */
+  galleryEditable?: boolean;
 }>();
 
 const emit = defineEmits<{ 'update:modelValue': [boolean] }>();
@@ -122,11 +137,14 @@ const open = computed({
   set: (value: boolean) => emit('update:modelValue', value),
 });
 
-const activeTab = ref<'appearance' | 'gallery'>('appearance');
-const tabs = [
+type SettingsTabId = 'appearance' | 'gallery' | 'gallery-manage';
+
+const activeTab = ref<SettingsTabId>('appearance');
+const tabs = computed(() => [
   { id: 'appearance' as const, label: '外观' },
   { id: 'gallery' as const, label: '图鉴' },
-];
+  ...(props.galleryEditable ? [{ id: 'gallery-manage' as const, label: '图鉴管理' }] : []),
+]);
 
 const DENSITIES = [
   { value: 'compact' as const, label: '紧凑' },
@@ -135,6 +153,15 @@ const DENSITIES = [
 ];
 
 const { presets, themeId, density, fontScale, portrait, portraitAuto, tryKey, imageUnlocked } = props.state;
+
+/** 外部切换 tab 信号（由 App 注入：如点击好感度锁 → 跳转图鉴 tab） */
+const settingsTab = inject<Ref<SettingsTabId>>('sbSettingsTab', ref('appearance'));
+watch(settingsTab, (tab) => {
+  if (tab !== activeTab.value) {
+    activeTab.value = tab;
+    nextTick(positionModal);
+  }
+});
 
 /* ===== 弹窗定位：锚定到状态栏面板中心（无锚点时回退 CSS 默认的视口居中） ===== */
 let positionRaf = 0;
@@ -176,7 +203,7 @@ function onViewportChange() {
 }
 
 /** 切换 tab 后弹窗尺寸变化，重算一次防被视口边界裁剪 */
-function onTabClick(id: 'appearance' | 'gallery') {
+function onTabClick(id: SettingsTabId) {
   activeTab.value = id;
   nextTick(positionModal);
 }

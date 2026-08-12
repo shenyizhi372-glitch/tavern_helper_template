@@ -33,7 +33,15 @@
         <span class="sb-field-label">好感度</span>
         <span class="sb-affinity-value">{{ affinity }}</span>
         <span class="sb-affinity-controls">
-          <LockInput v-if="lockLocked" :lock="affinityLock" />
+          <button
+            v-if="lockLocked"
+            class="sb-affinity-lock"
+            type="button"
+            title="在设置-图鉴中输入家庭密钥后可调整"
+            @click="openSettings('gallery')"
+          >
+            🔒 已锁定
+          </button>
           <input
             v-else
             class="sb-affinity-range"
@@ -53,7 +61,6 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import type { Schema } from '../../../schema';
-import LockInput from '../../../../通用/状态栏/components/LockInput.vue';
 import { affinityLock } from '../gallery';
 
 const props = defineProps<{
@@ -66,7 +73,13 @@ const props = defineProps<{
 /** 密钥解锁记录（由 App 注入 useSettings 的 keys） */
 const keys = inject<{ value: string[] }>('sbKeys', { value: [] });
 
-/** 好感度调节锁定：输入家庭密钥解锁后可调 */
+/** 打开设置弹窗并切到指定 tab（由 App 注入；锁定时引导用户去设置-图鉴输密钥） */
+const openSettings = inject<(tab: 'appearance' | 'gallery' | 'gallery-manage') => void>(
+  'sbOpenSettings',
+  () => undefined,
+);
+
+/** 好感度调节锁定：输入家庭密钥解锁后可调（密钥入口在设置-图鉴） */
 const lockLocked = computed(() => !keys.value.includes(affinityLock.key));
 
 // 默认展开（与穿花蝶传一致），点击表头折叠
@@ -103,6 +116,25 @@ function onRangeInput(event: Event) {
 .sb-affinity-controls {
   display: inline-flex;
   align-items: center;
+}
+
+.sb-affinity-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.15em 0.8em;
+  border: 1px dashed var(--c-border);
+  border-radius: var(--sb-radius-pill);
+  background-color: var(--c-surface-alt);
+  color: var(--c-text-muted);
+  font-size: 10.5px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.sb-affinity-lock:hover {
+  border-color: var(--c-warning);
+  color: var(--c-text);
 }
 
 .sb-affinity-range {

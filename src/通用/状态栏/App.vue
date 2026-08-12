@@ -83,6 +83,14 @@ watch(
 const settingsOpen = ref(false);
 const hasSettings = computed(() => !!props.config.gallery || !!props.config.settings);
 
+/** 设置弹窗 tab（外部可跳转；通用版无状态栏内锁按钮，仅保持接口一致） */
+const settingsTab = ref<'appearance' | 'gallery' | 'gallery-manage'>('appearance');
+provide('sbSettingsTab', settingsTab);
+provide('sbOpenSettings', (tab: 'appearance' | 'gallery' | 'gallery-manage') => {
+  settingsTab.value = tab;
+  settingsOpen.value = true;
+});
+
 /** 弹窗锚点：状态栏根节点（.sb-status-bar），弹窗以其中线为基准定位 */
 const rootEl = ref<HTMLElement | null>(null);
 const getAnchor = (): HTMLElement | null => rootEl.value;

@@ -53,7 +53,8 @@ async function pick(index: number) {
 
 <style scoped>
 .sb-plot {
-  margin-top: 12px;
+  /* 面板底部整行（与 .sb-layout 左右边距对齐） */
+  margin: 4px 10px 10px;
   padding: 10px 12px;
   background: var(--c-surface-alt);
   border-radius: 10px;

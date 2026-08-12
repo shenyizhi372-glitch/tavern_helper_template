@@ -31,14 +31,14 @@ export function useSettings(gallery: GalleryConfig | undefined, settings: Settin
   const keys = useLocalStorage<string[]>('sb:keys', []);
   const unlocked = useLocalStorage<string[]>('sb:gallery-unlocked', []);
 
-  /** 全部可选主题预设：'default'（宝可梦）+ 内置三套 + 项目自定义 */
+  /** 全部可选主题预设：内置四套（家庭/蓝/灰/粉/夜行）+ 项目自定义 */
   const presets = computed(() => [
-    { id: 'default', label: '宝可梦卡', theme: {} as never },
     ...presetThemes,
     ...(settings?.themePresets ?? []),
   ]);
 
-  const currentPreset = computed(() => presets.value.find(p => p.id === themeId.value));
+  /** 当前预设：找不到时（如历史遗留的 'default'）回退到第一套 */
+  const currentPreset = computed(() => presets.value.find(p => p.id === themeId.value) ?? presets.value[0]);
 
   const mergedTheme = computed<StatusBarTheme>(() => {
     const base = currentPreset.value ? mergeTheme(defaultTheme, currentPreset.value.theme) : defaultTheme;
@@ -84,9 +84,13 @@ export function useSettings(gallery: GalleryConfig | undefined, settings: Settin
     return keys.value.includes(key);
   }
 
-  /** 阶段图是否解锁：密钥 / 永久记录 / 条件实时判定 */
+  /** 阶段图是否解锁：单图密钥 / 全局密钥（全部解锁）/ 永久记录 / 条件实时判定 */
   function imageUnlocked(image: StageImageLike, data: unknown): boolean {
     if (image.key && keyUnlocked(image.key)) {
+      return true;
+    }
+    // 全局密钥已记录：所有图鉴图（含仅条件、无单图密钥的图）一并解锁
+    if (gallery?.masterKey && keyUnlocked(gallery.masterKey)) {
       return true;
     }
     if (unlocked.value.includes(image.id)) {

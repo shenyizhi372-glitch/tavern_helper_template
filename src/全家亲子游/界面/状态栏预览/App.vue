@@ -8,10 +8,12 @@
         <span class="sb-topbar-title">🏡 全家亲子游</span>
         <SettingsButton @click="settingsOpen = true" />
       </div>
-      <StatusPanel ref="panelRef" :data="mock.data" :store="mock" />
+      <StatusPanel ref="panelRef" :data="mock.data" :store="mock" :gallery="galleryState" />
       <SettingsModal
         v-model="settingsOpen"
-        :gallery="gallery"
+        :gallery="galleryState"
+        :original-gallery="gallery"
+        :gallery-editable="true"
         :settings="settings"
         :data="mock.data"
         :state="state"
@@ -23,8 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, ref, reactive } from 'vue';
+import { computed, provide, reactive, ref } from 'vue';
 import type { Schema } from '../../schema';
+import type { CharacterGallery, GalleryConfig } from '../../../通用/状态栏/types';
 import StatusPanel from '../状态栏/components/StatusPanel.vue';
 import SettingsButton from '../../../通用/状态栏/components/SettingsButton.vue';
 import SettingsModal from '../../../通用/状态栏/components/SettingsModal.vue';
@@ -55,6 +58,15 @@ const mock = reactive({
         当前行动: '在沙发边摆弄新买的积木',
         好感度: 50,
       },
+      小姨: {
+        表情: '💃',
+        _用户: false,
+        穿着: '碎花连衣裙，发梢微卷',
+        神态: '慵懒含笑，眼神带着探究',
+        心情: '轻松惬意',
+        当前行动: '靠在沙发边翻着手机',
+        好感度: 60,
+      },
     },
     剧情: {
       当前事件: '一家三口的周末早晨，早餐刚结束',
@@ -72,6 +84,65 @@ const settingsOpen = ref(false);
 /** 弹窗锚点：当前状态栏面板（.sb-panel），弹窗以面板中心为基准定位 */
 const panelRef = ref<InstanceType<typeof StatusPanel> | null>(null);
 const getAnchor = (): HTMLElement | null => (panelRef.value?.$el as HTMLElement | undefined) ?? null;
+
+/**
+ * 图鉴配置：与生产一致支持「图鉴管理」编辑（localStorage 持久化）；
+ * 预览额外追加一个演示角色「小姨」用于验证多角色切换（内联 SVG 占位图，不依赖 CDN）。
+ */
+const EDIT_KEY = 'sb:gallery-edit';
+
+function loadGallery(): GalleryConfig {
+  const base = structuredClone(gallery);
+  try {
+    const saved = localStorage.getItem(EDIT_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved) as GalleryConfig;
+      if (parsed && Array.isArray(parsed.characters)) {
+        return parsed;
+      }
+    }
+  } catch {
+    /* 损坏数据忽略，用代码配置 */
+  }
+  return base;
+}
+
+function demoPortrait(color: string, label: string): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="300" height="400" fill="${color}"/><text x="150" y="210" font-size="28" text-anchor="middle" fill="#ffffff">${label}</text></svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+const demoCharacter: CharacterGallery = {
+  id: '小姨',
+  name: '小姨',
+  icon: '💃',
+  images: [
+    { id: '小姨-日常', label: '日常', url: demoPortrait('#d485a3', '小姨·日常') },
+    {
+      id: '小姨-亲昵',
+      label: '亲昵',
+      url: demoPortrait('#c26b8d', '小姨·亲昵'),
+      unlock: { type: 'threshold', variable: '角色.小姨.好感度', min: 70 },
+    },
+  ],
+};
+
+const galleryState = reactive(loadGallery()) as GalleryConfig;
+if (!galleryState.characters.some(c => c.id === demoCharacter.id)) {
+  galleryState.characters.push(demoCharacter);
+}
+
+/** 设置弹窗 tab（可由状态栏内锁定标记跳转到图鉴） */
+type SettingsTabId = 'appearance' | 'gallery' | 'gallery-manage';
+const settingsTab = ref<SettingsTabId>('appearance');
+
+function openSettingsTab(tab: SettingsTabId) {
+  settingsTab.value = tab;
+  settingsOpen.value = true;
+}
+
+provide('sbSettingsTab', settingsTab);
+provide('sbOpenSettings', openSettingsTab);
 
 /** 设置与解锁状态（localStorage 持久化，与生产一致） */
 const state = useSettings(gallery, settings);

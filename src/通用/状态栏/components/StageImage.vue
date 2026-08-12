@@ -41,8 +41,9 @@ watch(() => props.gallery, () => { failed.value = false; });
 /**
  * 显示的阶段图：
  * - 开启「立绘随变量切换」：按阶段递进取「已满足条件的最高级阶段图」
- *   （日常 → 亲昵 → 沉沦，好感度等变量越高显示越深入）；
- *   没有任何阶段图满足条件时回退第一张（初始立绘/锁定遮罩）。
+ *   （顺序即阶段递进：日常 → 亲昵 → 沉沦；无条件图视为恒满足，
+ *   变量越高显示越深入，作者新增的图排在后面即为更高阶段）；
+ *   没有任何图满足时回退第一张（初始立绘/锁定遮罩）。
  * - 关闭开关：固定初始立绘（第一张），不再随条件切换。
  */
 const current = computed(() => {
@@ -52,7 +53,7 @@ const current = computed(() => {
   }
   let highest: (typeof images)[number] | null = null;
   for (const image of images) {
-    if (image.unlock && imageUnlocked(image)) {
+    if (!image.unlock || imageUnlocked(image)) {
       highest = image;
     }
   }

@@ -4,11 +4,19 @@
       <span class="sb-topbar-title">🏡 全家亲子游</span>
       <SettingsButton @click="settingsOpen = true" />
     </div>
-    <StatusPanel ref="panelRef" v-if="store.data" :data="store.data" :store="store" />
+    <StatusPanel
+      ref="panelRef"
+      v-if="store.data"
+      :data="store.data"
+      :store="store"
+      :gallery="galleryState"
+    />
     <div v-else class="status-missing">[状态栏缺失]</div>
     <SettingsModal
       v-model="settingsOpen"
-      :gallery="gallery"
+      :gallery="galleryState"
+      :original-gallery="gallery"
+      :gallery-editable="true"
       :settings="settings"
       :data="store.data"
       :state="state"
@@ -18,7 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue';
+import { computed, provide, reactive, ref } from 'vue';
+import type { GalleryConfig } from '../../../通用/状态栏/types';
 import StatusPanel from './components/StatusPanel.vue';
 import SettingsButton from '../../../通用/状态栏/components/SettingsButton.vue';
 import SettingsModal from '../../../通用/状态栏/components/SettingsModal.vue';
@@ -32,6 +41,42 @@ const settingsOpen = ref(false);
 /** 弹窗锚点：当前状态栏面板（.sb-panel），弹窗以面板中心为基准定位 */
 const panelRef = ref<InstanceType<typeof StatusPanel> | null>(null);
 const getAnchor = (): HTMLElement | null => (panelRef.value?.$el as HTMLElement | undefined) ?? null;
+
+/**
+ * 图鉴配置：支持作者在设置「图鉴管理」中编辑（localStorage 持久化），编辑实时生效。
+ * 未编辑时用代码配置（clone 避免改写静态常量）。
+ */
+const EDIT_KEY = 'sb:gallery-edit';
+
+function loadGallery(): GalleryConfig {
+  const base = structuredClone(gallery);
+  try {
+    const saved = localStorage.getItem(EDIT_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved) as GalleryConfig;
+      if (parsed && Array.isArray(parsed.characters)) {
+        return parsed;
+      }
+    }
+  } catch {
+    /* 损坏数据忽略，用代码配置 */
+  }
+  return base;
+}
+
+const galleryState = reactive(loadGallery()) as GalleryConfig;
+
+/** 设置弹窗 tab（可由状态栏内锁定标记跳转到图鉴） */
+type SettingsTabId = 'appearance' | 'gallery' | 'gallery-manage';
+const settingsTab = ref<SettingsTabId>('appearance');
+
+function openSettingsTab(tab: SettingsTabId) {
+  settingsTab.value = tab;
+  settingsOpen.value = true;
+}
+
+provide('sbSettingsTab', settingsTab);
+provide('sbOpenSettings', openSettingsTab);
 
 /** 设置与解锁状态（localStorage 持久化） */
 const state = useSettings(gallery, settings);

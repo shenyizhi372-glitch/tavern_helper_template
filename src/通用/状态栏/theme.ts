@@ -103,7 +103,7 @@ export function themeToCssVars(theme: StatusBarTheme): Record<string, string> {
   };
 }
 
-/** 内置主题预设（设置界面切换用；'default' 即宝可梦卡默认主题） */
+/** 内置主题预设（设置界面切换用） */
 export const presetThemes: ThemePreset[] = [
   {
     id: 'family',
@@ -123,6 +123,72 @@ export const presetThemes: ThemePreset[] = [
         border: '#e9dcc9',
         progressTrack: '#e9dcc9',
         progressFill: '#d98f8f',
+      },
+      font: { family: `'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif` },
+    },
+  },
+  {
+    id: 'blue',
+    label: '清冷蓝',
+    theme: {
+      colors: {
+        primary: '#4a7dbd',
+        accent: '#6fa8dc',
+        success: '#4c9f70',
+        warning: '#d9a441',
+        danger: '#c05252',
+        surface: '#f2f6fb',
+        surfaceAlt: '#e3ecf5',
+        text: '#2c3e50',
+        textMuted: '#7a8fa3',
+        textOnPrimary: '#ffffff',
+        border: '#c9d8e8',
+        progressTrack: '#dce7f2',
+        progressFill: '#4a7dbd',
+      },
+      font: { family: `'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif` },
+    },
+  },
+  {
+    id: 'gray',
+    label: '素净灰',
+    theme: {
+      colors: {
+        primary: '#7a8699',
+        accent: '#a3aebc',
+        success: '#7fa57f',
+        warning: '#c9a04a',
+        danger: '#b05252',
+        surface: '#f4f5f6',
+        surfaceAlt: '#e9ebee',
+        text: '#3a3f47',
+        textMuted: '#8a919c',
+        textOnPrimary: '#ffffff',
+        border: '#d5d9df',
+        progressTrack: '#e2e5ea',
+        progressFill: '#7a8699',
+      },
+      font: { family: `'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif` },
+    },
+  },
+  {
+    id: 'pink',
+    label: '甜粉',
+    theme: {
+      colors: {
+        primary: '#d485a3',
+        accent: '#e8a3bc',
+        success: '#8fae7f',
+        warning: '#d9a441',
+        danger: '#c05252',
+        surface: '#fdf5f7',
+        surfaceAlt: '#f9e8ed',
+        text: '#4d3840',
+        textMuted: '#a88894',
+        textOnPrimary: '#4d3840', // 主色较浅，用深色前景保证对比度
+        border: '#ecd4dc',
+        progressTrack: '#f2dfe6',
+        progressFill: '#d485a3',
       },
       font: { family: `'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif` },
     },
