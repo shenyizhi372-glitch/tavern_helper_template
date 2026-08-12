@@ -7,7 +7,6 @@
       :data="data"
       :is-unlocked-override="imageUnlockedOf"
     />
-    <StatImage class="sb-scene" :source="sceneSource" :data="data" ratio="16/9" placeholder="🏠" />
     <HeaderRow :data="data.系统" />
     <div class="sb-chars">
       <CharSection
@@ -30,7 +29,6 @@ import { isUnlocked } from '../../../../通用/状态栏/unlock';
 import CharSection from './CharSection.vue';
 import HeaderRow from './HeaderRow.vue';
 import PlotOptions from './PlotOptions.vue';
-import StatImage from '../../../../通用/状态栏/components/StatImage.vue';
 import StageImage from '../../../../通用/状态栏/components/StageImage.vue';
 import { gallery } from '../gallery';
 
@@ -63,21 +61,6 @@ function imageUnlockedOf(image: StageImageType): boolean {
   }
   return isUnlocked(image.unlock, props.data);
 }
-
-/**
- * 场景图映射（项目静态图，推送到 GitHub 后经 jsdelivr CDN 加载）：
- * AI 只需维护 系统.地点 变量，前端按地点名查表显示对应场景图。
- */
-const SCENE_IMAGES: Record<string, string> = {
-  '家·客厅': 'https://testingcf.jsdelivr.net/gh/shenyizhi372-glitch/tavern_helper_template/src/全家亲子游/图片/客厅.svg',
-  '家·厨房': 'https://testingcf.jsdelivr.net/gh/shenyizhi372-glitch/tavern_helper_template/src/全家亲子游/图片/厨房.svg',
-};
-
-const sceneSource = {
-  type: 'mapped' as const,
-  by: '系统.地点',
-  map: SCENE_IMAGES,
-};
 </script>
 
 <style scoped>

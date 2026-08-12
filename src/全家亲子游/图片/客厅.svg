@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
-  <rect width="640" height="360" fill="#f3e9d8"/>
-  <rect x="24" y="24" width="592" height="312" rx="20" fill="#fdf9f0" stroke="#e2d4bc" stroke-width="2"/>
-  <text x="320" y="150" font-size="130" text-anchor="middle">🛋️</text>
-  <text x="320" y="238" font-size="40" text-anchor="middle">📺</text>
-  <text x="320" y="295" font-size="26" text-anchor="middle" fill="#8a7560" font-family="Microsoft YaHei, PingFang SC, sans-serif">客厅 · 温馨的家</text>
-</svg>
