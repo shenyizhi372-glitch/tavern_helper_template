@@ -18,6 +18,7 @@
   --c-text-muted: #a4937f; /* 次要文字：标签 */
   --c-border: #e9dcc9; /* 边框、分隔线 */
   --c-user-line: #8aaed6; /* 张宝区左边线（用户） */
+  --c-text-on-primary: #ffffff; /* 主色上的前景文字（徽章、标签） */
   --c-font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
 
   /* 通用组件主题别名：把通用组件的 --sb-* 变量映射到本项目的 --c-* 色系 */
@@ -30,6 +31,7 @@
   --sb-surface-alt: var(--c-surface-alt);
   --sb-text: var(--c-text);
   --sb-text-muted: var(--c-text-muted);
+  --sb-text-on-primary: var(--c-text-on-primary);
   --sb-border: var(--c-border);
   --sb-progress-track: var(--c-border);
   --sb-progress-fill: var(--c-accent);
@@ -106,7 +108,7 @@
   border-left: 3px solid var(--c-primary);
   margin: 4px 10px;
   border-radius: 6px;
-  background: #fffdf8;
+  background: var(--c-surface);
 }
 
 .sb-char.is-user {
@@ -159,7 +161,7 @@
   padding: 0 5px;
   border-radius: 8px;
   background: var(--c-user-line);
-  color: #fff;
+  color: var(--c-text-on-primary);
   font-size: 10px;
   line-height: 16px;
 }
@@ -180,7 +182,7 @@
   align-items: baseline;
   gap: 6px;
   padding: 3px 0;
-  border-bottom: 1px dashed #f1e6d6;
+  border-bottom: 1px dashed var(--c-border);
 }
 
 .sb-field:last-child {

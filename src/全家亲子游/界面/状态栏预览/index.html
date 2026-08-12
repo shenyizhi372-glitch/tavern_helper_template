@@ -1,4 +1,6 @@
 <head>
+  <!-- 明确 UTF-8：预览页可能被无 charset 的静态服务器（如 python -m http.server）托管，缺省会按系统 locale 解码导致乱码/脚本报错 -->
+  <meta charset="utf-8" />
   <!-- 预览专用：模拟酒馆助手预注入的全局变量（生产环境由酒馆助手注入，无需这些） -->
   <script src="https://testingcf.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js"></script>
   <script src="https://testingcf.jsdelivr.net/npm/vue@3.5.41/dist/vue.global.prod.js"></script>

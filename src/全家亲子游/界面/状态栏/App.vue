@@ -1,10 +1,10 @@
 <template>
-  <div class="status-root" :style="cssVars">
+  <div class="status-root" :class="{ 'is-blurred': settingsOpen }" :style="cssVars">
     <div class="sb-topbar">
       <span class="sb-topbar-title">🏡 全家亲子游</span>
       <SettingsButton @click="settingsOpen = true" />
     </div>
-    <StatusPanel v-if="store.data" :data="store.data" :store="store" />
+    <StatusPanel ref="panelRef" v-if="store.data" :data="store.data" :store="store" />
     <div v-else class="status-missing">[状态栏缺失]</div>
     <SettingsModal
       v-model="settingsOpen"
@@ -12,6 +12,7 @@
       :settings="settings"
       :data="store.data"
       :state="state"
+      :get-anchor="getAnchor"
     />
   </div>
 </template>
@@ -28,6 +29,10 @@ import { gallery, settings } from './gallery';
 const store = useDataStore();
 const settingsOpen = ref(false);
 
+/** 弹窗锚点：当前状态栏面板（.sb-panel），弹窗以面板中心为基准定位 */
+const panelRef = ref<InstanceType<typeof StatusPanel> | null>(null);
+const getAnchor = (): HTMLElement | null => (panelRef.value?.$el as HTMLElement | undefined) ?? null;
+
 /** 设置与解锁状态（localStorage 持久化） */
 const state = useSettings(gallery, settings);
 
@@ -39,6 +44,10 @@ if (!localStorage.getItem('sb:theme')) {
 /** 供子组件读取主题配置与密钥解锁记录 */
 provide('sbTheme', state.mergedTheme);
 provide('sbKeys', state.keys);
+/** 供立绘组件读取立绘大小设置 */
+provide('sbPortrait', state.portrait);
+/** 立绘随变量切换开关（默认开） */
+provide('sbPortraitAuto', state.portraitAuto);
 
 /** 主题变量同步到 --c-*（自有组件换肤联动：好感度条、角色卡、剧情选项） */
 const cssVars = computed(() => {
@@ -53,6 +62,7 @@ const cssVars = computed(() => {
     '--c-surface-alt': '--sb-surface-alt',
     '--c-text': '--sb-text',
     '--c-text-muted': '--sb-text-muted',
+    '--c-text-on-primary': '--sb-text-on-primary',
     '--c-border': '--sb-border',
   };
   for (const [c, sb] of Object.entries(map)) {
@@ -63,6 +73,12 @@ const cssVars = computed(() => {
 </script>
 
 <style scoped>
+/* 弹窗打开时状态栏自身模糊（只模糊状态栏，不影响系统界面） */
+.status-root.is-blurred {
+  filter: blur(3px);
+  transition: filter 0.25s ease;
+}
+
 .status-root {
   width: 100%;
 }

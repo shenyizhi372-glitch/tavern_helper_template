@@ -187,7 +187,7 @@ function submitMaster() {
   padding: 0.05em 0.6em;
   border-radius: var(--sb-radius-pill);
   background-color: color-mix(in srgb, var(--sb-primary) 82%, transparent);
-  color: #fff;
+  color: var(--sb-text-on-primary);
   font-size: var(--sb-font-size-small);
 }
 

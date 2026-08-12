@@ -6,6 +6,10 @@
  * - enum：枚举值 → 彩色徽章（含图标映射）
  * - progress：数值进度条（0-100 自动渲染 + 阈值配色）
  * - stars：星级展示（★★★★☆）
+ * - slider：滑块（拖动写变量，防抖 300ms）
+ * - input：文本输入（回车提交写变量）
+ * - choice：选项组（点击写变量 / 发消息触发 AI）
+ * - number：数值展示（可指定小数位）
  *
  * 真实项目接入时，把本文件按自己的变量路径重写即可，界面代码零改动。
  */
@@ -68,6 +72,23 @@ export const config: StatusBarConfig = {
         { type: 'text', path: '凯瑟琳.最近事件', label: '最近事件', icon: '📜' },
         // 演示 stars 类型：0-100 的数值按 5 星展示（值/20 取整）
         { type: 'stars', path: '凯瑟琳.身体开发度', label: '开发星级', icon: '⭐', max: 5 },
+        // 演示 slider 类型：拖动写回 凯瑟琳.身体开发度（防抖 300ms）
+        { type: 'slider', path: '凯瑟琳.身体开发度', label: '开发度调节', icon: '🎚️', min: 0, max: 100, step: 1, showValue: true },
+        // 演示 input 类型：回车提交写回 凯瑟琳.身体状态
+        { type: 'input', path: '凯瑟琳.身体状态', label: '状态记录', icon: '✍️', placeholder: '输入当前状态…', commitOn: 'enter' },
+        // 演示 choice 类型：点击选项直接写变量（message 型选项会触发 AI）
+        {
+          type: 'choice',
+          path: '凯瑟琳.沦陷阶段',
+          label: '阶段推进',
+          icon: '🌊',
+          options: [
+            { label: '纯真期', icon: '🤍', action: { mode: 'variable', path: '凯瑟琳.沦陷阶段', value: '纯真期' } },
+            { label: '试探期', icon: '💛', action: { mode: 'variable', path: '凯瑟琳.沦陷阶段', value: '试探期' } },
+            { label: '沉沦期', icon: '🧡', action: { mode: 'variable', path: '凯瑟琳.沦陷阶段', value: '沉沦期' } },
+            { label: '堕落期', icon: '❤️', action: { mode: 'variable', path: '凯瑟琳.沦陷阶段', value: '堕落期' } },
+          ],
+        },
       ],
     },
     {
@@ -87,6 +108,8 @@ export const config: StatusBarConfig = {
             { color: '#2e7d32' },
           ],
         },
+        // 演示 number 类型：数值展示（可指定小数位）
+        { type: 'number', path: '小胖.欲望值', label: '欲望数值', icon: '🔢', precision: 0 },
         { type: 'text', path: '小胖.最近行为', label: '最近行为', icon: '🎭' },
       ],
     },

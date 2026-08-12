@@ -13,7 +13,7 @@
           class="sb-settings-tab"
           :class="{ active: activeTab === tab.id }"
           type="button"
-          @click="activeTab = tab.id"
+          @click="onTabClick(tab.id)"
         >
           {{ tab.label }}
         </button>
@@ -63,6 +63,23 @@
             @input="fontScale = Number(($event.target as HTMLInputElement).value)"
           />
         </div>
+        <div v-if="gallery" class="sb-settings-group">
+          <label class="sb-settings-check">
+            <input type="checkbox" v-model="portraitAuto" />
+            <span>立绘随变量切换</span>
+          </label>
+          <div class="sb-settings-check-note">关闭后固定显示初始立绘，不再随好感度等条件切换</div>
+          <div class="sb-settings-group-label">立绘大小 {{ portrait }}px</div>
+          <input
+            class="sb-settings-range"
+            type="range"
+            min="100"
+            max="240"
+            step="10"
+            :value="portrait"
+            @input="portrait = Number(($event.target as HTMLInputElement).value)"
+          />
+        </div>
       </div>
 
       <!-- 图鉴 -->
@@ -81,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { VueFinalModal } from 'vue-final-modal';
 import type { GalleryConfig, SettingsConfig } from '../types';
 import type { SettingsState } from '../useSettings';
@@ -94,6 +111,8 @@ const props = defineProps<{
   data: unknown;
   /** useSettings 状态（由入口 App 创建后传入） */
   state: SettingsState;
+  /** 弹窗锚点：返回状态栏面板元素（如 .sb-panel）；缺省时弹窗居中于视口 */
+  getAnchor?: () => HTMLElement | null;
 }>();
 
 const emit = defineEmits<{ 'update:modelValue': [boolean] }>();
@@ -115,7 +134,72 @@ const DENSITIES = [
   { value: 'comfortable' as const, label: '舒适' },
 ];
 
-const { presets, themeId, density, fontScale, tryKey, imageUnlocked } = props.state;
+const { presets, themeId, density, fontScale, portrait, portraitAuto, tryKey, imageUnlocked } = props.state;
+
+/* ===== 弹窗定位：锚定到状态栏面板中心（无锚点时回退 CSS 默认的视口居中） ===== */
+let positionRaf = 0;
+
+function positionModal() {
+  const anchor = props.getAnchor?.() ?? null;
+  const contents = Array.from(document.querySelectorAll<HTMLElement>('.vfm__content'));
+  if (!contents.length) {
+    return;
+  }
+  let left: number | null = null;
+  let top: number | null = null;
+  if (anchor) {
+    const rect = anchor.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const width = contents[0].offsetWidth;
+    const height = contents[0].offsetHeight;
+    left = Math.min(Math.max(cx - width / 2, 8), Math.max(window.innerWidth - width - 8, 8));
+    top = Math.min(Math.max(cy - height / 2, 8), Math.max(window.innerHeight - height - 8, 8));
+  }
+  for (const el of contents) {
+    if (left === null || top === null) {
+      el.style.top = '';
+      el.style.left = '';
+      el.style.transform = '';
+    } else {
+      el.style.top = `${top}px`;
+      el.style.left = `${left}px`;
+      el.style.transform = 'none';
+    }
+  }
+}
+
+/** resize / scroll 后重算（rAF 节流；scroll 捕获阶段可跟随聊天滚动） */
+function onViewportChange() {
+  cancelAnimationFrame(positionRaf);
+  positionRaf = requestAnimationFrame(positionModal);
+}
+
+/** 切换 tab 后弹窗尺寸变化，重算一次防被视口边界裁剪 */
+function onTabClick(id: 'appearance' | 'gallery') {
+  activeTab.value = id;
+  nextTick(positionModal);
+}
+
+watch(open, (value) => {
+  if (value) {
+    // teleport 内容异步挂载：nextTick 后仍需等一帧才能测到 .vfm__content 尺寸
+    nextTick(() => {
+      requestAnimationFrame(() => requestAnimationFrame(positionModal));
+    });
+  }
+});
+
+onMounted(() => {
+  window.addEventListener('resize', onViewportChange);
+  window.addEventListener('scroll', onViewportChange, { passive: true, capture: true });
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', onViewportChange);
+  window.removeEventListener('scroll', onViewportChange, { capture: true });
+  cancelAnimationFrame(positionRaf);
+});
 </script>
 
 <style scoped>
@@ -225,6 +309,26 @@ const { presets, themeId, density, fontScale, tryKey, imageUnlocked } = props.st
   accent-color: var(--sb-primary);
 }
 
+.sb-settings-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.3em;
+  cursor: pointer;
+  font-size: var(--sb-font-size-label);
+}
+
+.sb-settings-check input {
+  accent-color: var(--sb-primary);
+  cursor: pointer;
+}
+
+.sb-settings-check-note {
+  margin-bottom: 0.5em;
+  font-size: var(--sb-font-size-small);
+  color: var(--sb-text-muted);
+}
+
 .sb-settings-empty {
   padding: 1.5em 0;
   text-align: center;
@@ -233,24 +337,31 @@ const { presets, themeId, density, fontScale, tryKey, imageUnlocked } = props.st
 }
 </style>
 
-<!-- vue-final-modal 最小样式（模板 css rule 排除 node_modules，自行提供遮罩/定位） -->
+<!-- vue-final-modal 最小样式（模板 css rule 排除 node_modules，自行提供遮罩/定位）
+     遮罩透明、无 backdrop-filter：背景模糊由状态栏容器自身 blur 实现（只模糊状态栏，不影响系统界面） -->
 <style>
 .vfm--overlay {
   position: fixed;
   inset: 0;
-  z-index: 998;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(0 0 0 / 45%);
-  /* 遮罩不拦截内容交互（内容自身 pointer-events: auto） */
+  background-color: transparent;
   pointer-events: none;
 }
 
-.vfm--content {
-  position: relative;
-  z-index: 999;
+.vfm__content {
+  /* 相对视口的精确正中心（不依赖 flex 布局） */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
   pointer-events: auto;
+  max-width: 92vw;
+  max-height: 84vh;
+  overflow: auto;
 }
 
 .vfm-fade-enter-active,

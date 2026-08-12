@@ -40,7 +40,7 @@ const badgeStyle = computed(() => {
   padding: 0.1em 0.7em;
   border-radius: var(--sb-radius-pill);
   background-color: var(--sb-primary);
-  color: #fff;
+  color: var(--sb-text-on-primary);
   font-size: var(--sb-font-size-small);
   line-height: 1.6;
   white-space: nowrap;

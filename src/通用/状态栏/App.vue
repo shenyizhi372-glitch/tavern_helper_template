@@ -1,5 +1,5 @@
 <template>
-  <div class="sb-status-bar" :style="rootStyle">
+  <div ref="rootEl" class="sb-status-bar" :class="{ 'is-blurred': settingsOpen }" :style="rootStyle">
     <div class="sb-headbar">
       <div v-if="config.title" class="sb-title">{{ config.title }}</div>
       <SettingsButton
@@ -31,6 +31,7 @@
       :settings="config.settings"
       :data="data"
       :state="state"
+      :get-anchor="getAnchor"
     />
   </div>
 </template>
@@ -69,6 +70,9 @@ provide('sbTheme', state.mergedTheme);
 /** 供交互组件读取密钥解锁记录 */
 provide('sbKeys', state.keys);
 
+/** 立绘随变量切换开关（默认开） */
+provide('sbPortraitAuto', state.portraitAuto);
+
 /** 条件达成的图标记永久解锁（数据变化时同步） */
 watch(
   () => props.data,
@@ -78,6 +82,10 @@ watch(
 
 const settingsOpen = ref(false);
 const hasSettings = computed(() => !!props.config.gallery || !!props.config.settings);
+
+/** 弹窗锚点：状态栏根节点（.sb-status-bar），弹窗以其中线为基准定位 */
+const rootEl = ref<HTMLElement | null>(null);
+const getAnchor = (): HTMLElement | null => rootEl.value;
 
 const topImages = computed(() => (props.config.images ?? []).filter(image => image.position === 'top'));
 
@@ -95,6 +103,12 @@ const rootStyle = computed(() => ({ ...state.themeStyle.value, ...(bgStyle.value
 </script>
 
 <style scoped>
+/* 弹窗打开时状态栏自身模糊（只模糊状态栏，不影响系统界面） */
+.sb-status-bar.is-blurred {
+  filter: blur(3px);
+  transition: filter 0.25s ease;
+}
+
 .sb-headbar {
   position: relative;
 }

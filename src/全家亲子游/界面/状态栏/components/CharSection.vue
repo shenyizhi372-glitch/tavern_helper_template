@@ -31,16 +31,19 @@
       <div class="sb-field sb-field-affinity">
         <span class="sb-field-emoji">💗</span>
         <span class="sb-field-label">好感度</span>
-        <span class="sb-affinity-track">
-          <span class="sb-affinity-fill" :style="{ width: affinity + '%' }"></span>
-        </span>
         <span class="sb-affinity-value">{{ affinity }}</span>
         <span class="sb-affinity-controls">
           <LockInput v-if="lockLocked" :lock="affinityLock" />
-          <template v-else>
-            <button class="sb-affinity-btn" type="button" :disabled="affinity <= 0" @click="adjust(-5)">-</button>
-            <button class="sb-affinity-btn" type="button" :disabled="affinity >= 100" @click="adjust(5)">+</button>
-          </template>
+          <input
+            v-else
+            class="sb-affinity-range"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            :value="affinity"
+            @input="onRangeInput"
+          />
         </span>
       </div>
     </div>
@@ -71,33 +74,23 @@ const open = ref(true);
 
 const affinity = computed(() => Math.round(Number(props.char.好感度) || 0));
 
-/** 好感度调整（±5，钳制 0-100）——交互写回 MVU 变量，AI 下一轮感知 */
-function adjust(delta: number) {
-  const next = Math.min(100, Math.max(0, affinity.value + delta));
-  props.store.data.角色[props.name].好感度 = next;
+/** 滑块拖动写回 MVU 变量（defineMvuDataStore 自动同步），防抖 300ms */
+let rangeTimer: ReturnType<typeof setTimeout> | null = null;
+
+function onRangeInput(event: Event) {
+  const value = Number((event.target as HTMLInputElement).value);
+  if (rangeTimer) {
+    clearTimeout(rangeTimer);
+  }
+  rangeTimer = setTimeout(() => {
+    props.store.data.角色[props.name].好感度 = value;
+  }, 300);
 }
 </script>
 
 <style scoped>
 .sb-field-affinity {
   align-items: center;
-}
-
-.sb-affinity-track {
-  flex: 1;
-  height: 8px;
-  min-width: 48px;
-  border-radius: 999px;
-  background: var(--c-border);
-  overflow: hidden;
-}
-
-.sb-affinity-fill {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: var(--c-accent);
-  transition: width 0.2s ease;
 }
 
 .sb-affinity-value {
@@ -109,27 +102,12 @@ function adjust(delta: number) {
 
 .sb-affinity-controls {
   display: inline-flex;
-  gap: 4px;
+  align-items: center;
 }
 
-.sb-affinity-btn {
-  width: 22px;
-  height: 22px;
-  border: 1px solid var(--c-border);
-  border-radius: 6px;
-  background: var(--c-surface);
-  color: var(--c-text);
-  font-size: 13px;
-  line-height: 1;
+.sb-affinity-range {
+  width: 9em;
+  accent-color: var(--c-primary);
   cursor: pointer;
-}
-
-.sb-affinity-btn:hover:not(:disabled) {
-  border-color: var(--c-primary);
-}
-
-.sb-affinity-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 </style>

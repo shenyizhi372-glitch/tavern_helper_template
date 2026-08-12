@@ -28,6 +28,8 @@ export interface ThemeColors {
   text: string;
   /** 次要文字（标签） */
   textMuted: string;
+  /** 主色上的前景文字（徽章、标签） */
+  textOnPrimary: string;
   /** 边框、分隔线 */
   border: string;
   /** 进度条轨道 */

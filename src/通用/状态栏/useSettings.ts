@@ -20,6 +20,14 @@ export function useSettings(gallery: GalleryConfig | undefined, settings: Settin
   const themeId = useLocalStorage<string>('sb:theme', 'default');
   const density = useLocalStorage<'compact' | 'normal' | 'comfortable'>('sb:density', 'normal');
   const fontScale = useLocalStorage<number>('sb:font-scale', 100);
+  /** 立绘宽度（px），设置界面可调（左侧边栏布局用，范围 100-240） */
+  const portrait = useLocalStorage<number>('sb:portrait', 140);
+  // 兼容旧值：超出范围时回到默认
+  if (portrait.value < 100 || portrait.value > 240) {
+    portrait.value = 140;
+  }
+  /** 立绘随变量切换（默认开；关=固定初始立绘，不再随好感度等条件切换） */
+  const portraitAuto = useLocalStorage<boolean>('sb:portrait-auto', true);
   const keys = useLocalStorage<string[]>('sb:keys', []);
   const unlocked = useLocalStorage<string[]>('sb:gallery-unlocked', []);
 
@@ -109,6 +117,8 @@ export function useSettings(gallery: GalleryConfig | undefined, settings: Settin
     themeId,
     density,
     fontScale,
+    portrait,
+    portraitAuto,
     keys,
     presets,
     mergedTheme,
