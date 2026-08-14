@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { computed, provide, reactive, ref } from 'vue';
 import type { Schema } from '../../schema';
-import type { CharacterGallery, GalleryConfig } from '../../../通用/状态栏/types';
+import type { GalleryConfig } from '../../../通用/状态栏/types';
 import StatusPanel from '../状态栏/components/StatusPanel.vue';
 import SettingsModal from '../../../通用/状态栏/components/SettingsModal.vue';
 import { useSettings } from '../../../通用/状态栏/useSettings';
@@ -67,19 +67,6 @@ const mock = reactive({
         最近性行为: '',
         好感度: 50,
       },
-      小姨: {
-        表情: '💃',
-        _用户: false,
-        穿着: '碎花连衣裙，发梢微卷',
-        神态: '慵懒含笑，眼神带着探究',
-        心情: '轻松惬意',
-        当前行动: '靠在沙发边翻着手机',
-        胸部状况: '',
-        私处状况: '',
-        脸部状况: '',
-        最近性行为: '',
-        好感度: 60,
-      },
     },
     剧情: {
       当前事件: '爸爸去临省出差一个月，家里只剩母子俩；傍晚厨房做饭，儿子贴得很近',
@@ -100,8 +87,7 @@ const panelRef = ref<InstanceType<typeof StatusPanel> | null>(null);
 const getAnchor = (): HTMLElement | null => (panelRef.value?.$el as HTMLElement | undefined) ?? null;
 
 /**
- * 图鉴配置：与生产一致支持「图鉴管理」编辑（localStorage 持久化）；
- * 预览额外追加一个演示角色「小姨」用于验证多角色切换（内联 SVG 占位图，不依赖 CDN）。
+ * 图鉴配置：与生产一致支持「图鉴管理」编辑（localStorage 持久化）。
  */
 const EDIT_KEY = 'sb:gallery-edit';
 
@@ -121,30 +107,7 @@ function loadGallery(): GalleryConfig {
   return base;
 }
 
-function demoPortrait(color: string, label: string): string {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="300" height="400" fill="${color}"/><text x="150" y="210" font-size="28" text-anchor="middle" fill="#ffffff">${label}</text></svg>`;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
-
-const demoCharacter: CharacterGallery = {
-  id: '小姨',
-  name: '小姨',
-  icon: '💃',
-  images: [
-    { id: '小姨-日常', label: '日常', url: demoPortrait('#d485a3', '小姨·日常') },
-    {
-      id: '小姨-亲昵',
-      label: '亲昵',
-      url: demoPortrait('#c26b8d', '小姨·亲昵'),
-      unlock: { type: 'threshold', variable: '角色.小姨.好感度', min: 70 },
-    },
-  ],
-};
-
 const galleryState = reactive(loadGallery()) as GalleryConfig;
-if (!galleryState.characters.some(c => c.id === demoCharacter.id)) {
-  galleryState.characters.push(demoCharacter);
-}
 
 /** 设置弹窗 tab（可由状态栏内锁定标记跳转到图鉴） */
 type SettingsTabId = 'appearance' | 'gallery' | 'gallery-manage';
