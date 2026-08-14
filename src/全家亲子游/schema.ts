@@ -28,6 +28,11 @@ export const Schema = z.object({
       神态: z.string().prefault(''),
       心情: z.string().prefault(''),
       当前行动: z.string().prefault(''),
+      // 身体状态字段（全家亲子游孙莹状态栏，AI 每轮更新）
+      胸部状况: z.string().prefault(''),
+      私处状况: z.string().prefault(''),
+      脸部状况: z.string().prefault(''),
+      最近性行为: z.string().prefault(''),
       // 交互字段（前端可调，AI 按 check 规则更新）
       好感度: z.coerce.number().prefault(50),
     }),

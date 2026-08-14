@@ -5,7 +5,7 @@
       <span class="sb-char-emoji">{{ char.表情 || '👤' }}</span>
       <span class="sb-char-name">{{ name }}</span>
       <span v-if="char._用户" class="sb-char-tag">你</span>
-      <span class="sb-char-count">5 项</span>
+      <span class="sb-char-count">{{ fieldCount }} 项</span>
     </button>
     <div v-show="open" class="sb-char-body">
       <div class="sb-field">
@@ -27,6 +27,26 @@
         <span class="sb-field-emoji">🏃</span>
         <span class="sb-field-label">当前行动</span>
         <span class="sb-field-value">{{ char.当前行动 || '—' }}</span>
+      </div>
+      <div class="sb-field">
+        <span class="sb-field-emoji">🍒</span>
+        <span class="sb-field-label">胸部状况</span>
+        <span class="sb-field-value">{{ char.胸部状况 || '—' }}</span>
+      </div>
+      <div class="sb-field">
+        <span class="sb-field-emoji">🌸</span>
+        <span class="sb-field-label">私处状况</span>
+        <span class="sb-field-value">{{ char.私处状况 || '—' }}</span>
+      </div>
+      <div class="sb-field">
+        <span class="sb-field-emoji">👄</span>
+        <span class="sb-field-label">脸部状况</span>
+        <span class="sb-field-value">{{ char.脸部状况 || '—' }}</span>
+      </div>
+      <div class="sb-field">
+        <span class="sb-field-emoji">📅</span>
+        <span class="sb-field-label">最近性行为</span>
+        <span class="sb-field-value">{{ char.最近性行为 || '—' }}</span>
       </div>
       <div class="sb-field sb-field-affinity">
         <span class="sb-field-emoji">💗</span>
@@ -84,6 +104,9 @@ const lockLocked = computed(() => !keys.value.includes(affinityLock.key));
 
 // 默认展开（与穿花蝶传一致），点击表头折叠
 const open = ref(true);
+
+/** 展示字段数（8 个状态字段固定，好感度单独一行不计入） */
+const fieldCount = 8;
 
 const affinity = computed(() => Math.round(Number(props.char.好感度) || 0));
 

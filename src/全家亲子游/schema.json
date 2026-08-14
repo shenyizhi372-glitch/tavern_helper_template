@@ -51,6 +51,22 @@
             "default": "",
             "type": "string"
           },
+          "胸部状况": {
+            "default": "",
+            "type": "string"
+          },
+          "私处状况": {
+            "default": "",
+            "type": "string"
+          },
+          "脸部状况": {
+            "default": "",
+            "type": "string"
+          },
+          "最近性行为": {
+            "default": "",
+            "type": "string"
+          },
           "好感度": {
             "default": 50,
             "type": "number"
