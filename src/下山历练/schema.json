@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "系统": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前日期": {
+          "default": "2026/08/15",
+          "type": "string"
+        },
+        "当前时间段": {
+          "default": "下午",
+          "type": "string",
+          "enum": [
+            "清晨",
+            "上午",
+            "中午",
+            "下午",
+            "傍晚",
+            "夜晚",
+            "深夜"
+          ]
+        },
+        "当前场景": {
+          "default": "都市-街头",
+          "type": "string"
+        },
+        "最近事件": {
+          "default": "<user>在街头算命摊前设局，与二娘搭上话",
+          "type": "string"
+        },
+        "结局分支": {
+          "default": "进行中",
+          "type": "string",
+          "enum": [
+            "进行中",
+            "彻底征服",
+            "单线收束"
+          ]
+        }
+      }
+    },
+    "user": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前目标": {
+          "default": "与二娘周旋，把玉佩赔偿的局做下去",
+          "type": "string"
+        },
+        "已攻略对象": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "二娘": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "攻略阶段": {
+          "default": 1,
+          "type": "number"
+        },
+        "沦陷度": {
+          "default": 0,
+          "type": "number"
+        },
+        "胸部状况": {
+          "default": "白色背心下雪白爆乳撑得绷紧，乳头顶着布料鼓起，真空无内衣",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "包臀裙下真空，阴毛茂盛的熟女蜜穴，走路时臀肉晃动",
+          "type": "string"
+        },
+        "表情状况": {
+          "default": "眼角美人痣随挑眉跳动，嘴上带着大大咧咧的笑，眼神里全是好奇",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "这公子哥出手倒是阔气，那玉佩可真值钱？我倒要看看他葫芦里卖的什么药",
+          "type": "string"
+        }
+      }
+    },
+    "三娘": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "攻略阶段": {
+          "default": 1,
+          "type": "number"
+        },
+        "沦陷度": {
+          "default": 0,
+          "type": "number"
+        },
+        "胸部状况": {
+          "default": "白色道袍下巨乳鼓胀，衣襟被撑开一线",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "超短裙下白袜肉足并拢，阴毛茂盛藏在裙底",
+          "type": "string"
+        },
+        "表情状况": {
+          "default": "双马尾一甩，小虎牙露着，笑嘻嘻打量来人，眼里全是玩心",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "二娘说得神神秘秘的，我倒要看看这\"有趣的修士\"有多有趣",
+          "type": "string"
+        }
+      }
+    },
+    "大娘": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "攻略阶段": {
+          "default": 1,
+          "type": "number"
+        },
+        "沦陷度": {
+          "default": 0,
+          "type": "number"
+        },
+        "胸部状况": {
+          "default": "纯白道袍下爆乳沉甸甸地坠着，红肚兜勒出轮廓",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "红肚兜亵裤层层包裹，守了几百年的蜜谷藏在最里层",
+          "type": "string"
+        },
+        "表情状况": {
+          "default": "凤眉微蹙，目光冷冽，端坐主位不动如山",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "故人之后登门……礼数倒是周全，只是那双眼睛，总让为娘觉得不踏实",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

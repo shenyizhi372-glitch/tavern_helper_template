@@ -1,0 +1,53 @@
+<head>
+  <!-- 明确 UTF-8：预览页可能被无 charset 的静态服务器（如 python -m http.server）托管，缺省会按系统 locale 解码导致乱码/脚本报错 -->
+  <meta charset="utf-8" />
+  <!-- 预览专用：模拟酒馆助手预注入的全局变量（生产环境由酒馆助手注入，无需这些） -->
+  <script src="https://testingcf.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/vue@3.5.41/dist/vue.global.prod.js"></script>
+  <link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" />
+  <script src="https://testingcf.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+  <!-- 预览专用：zod 全局包（build 后由后处理脚本写入产物同名文件）；全局 z = 整个 zod 模块（含 .z 命名导出） -->
+  <script src="zod.global.js"></script>
+  <script>
+    window.z = Zod;
+  </script>
+  <style>
+    body {
+      margin: 0;
+      padding: 16px;
+      background: #efe6f7;
+      font-family: 'Microsoft YaHei', system-ui, sans-serif;
+    }
+    #err {
+      display: none;
+      position: fixed;
+      left: 8px;
+      right: 8px;
+      top: 8px;
+      z-index: 999;
+      padding: 10px;
+      background: #ffe9e9;
+      border: 1px solid #d33;
+      color: #a00;
+      font: 12px/1.6 monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div id="err"></div>
+  <div id="app"></div>
+  <script>
+    // 预览调试：把运行期错误显示在页面上（预览专用）
+    window.addEventListener('error', function (e) {
+      var el = document.getElementById('err');
+      el.style.display = 'block';
+      el.textContent = '[error] ' + e.message + '\n' + (e.error && e.error.stack ? e.error.stack : '');
+    });
+    window.addEventListener('unhandledrejection', function (e) {
+      var el = document.getElementById('err');
+      el.style.display = 'block';
+      el.textContent = '[unhandledrejection] ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason));
+    });
+  </script>
+</body>
