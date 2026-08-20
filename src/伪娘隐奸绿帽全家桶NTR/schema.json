@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "世界": {
+      "type": "object",
+      "properties": {
+        "当前时间": {
+          "type": "string"
+        },
+        "当前场景": {
+          "type": "string"
+        },
+        "沐昕察觉度": {
+          "default": 10,
+          "type": "number"
+        }
+      },
+      "required": [
+        "当前时间",
+        "当前场景"
+      ]
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "攻略阶段": {
+          "type": "string",
+          "enum": [
+            "潜伏渗透",
+            "当面攻略",
+            "全面掌控"
+          ]
+        },
+        "已攻略对象": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "攻略阶段",
+        "已攻略对象"
+      ]
+    },
+    "白雅琴": {
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "调教进度": {
+          "type": "string"
+        },
+        "最近性行为": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "调教进度",
+        "最近性行为"
+      ]
+    },
+    "沐嫣染": {
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "调教进度": {
+          "type": "string"
+        },
+        "最近性行为": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "调教进度",
+        "最近性行为"
+      ]
+    },
+    "沐冰铃": {
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "调教进度": {
+          "type": "string"
+        },
+        "最近性行为": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "调教进度",
+        "最近性行为"
+      ]
+    },
+    "白雅婷": {
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "调教进度": {
+          "type": "string"
+        },
+        "最近性行为": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "调教进度",
+        "最近性行为"
+      ]
+    },
+    "阮软": {
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "调教进度": {
+          "type": "string"
+        },
+        "最近性行为": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "调教进度",
+        "最近性行为"
+      ]
+    },
+    "秦韵": {
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "调教进度": {
+          "type": "string"
+        },
+        "最近性行为": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "调教进度",
+        "最近性行为"
+      ]
+    },
+    "萝莉团": {
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "调教进度": {
+          "type": "string"
+        },
+        "最近性行为": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "调教进度",
+        "最近性行为"
+      ]
+    }
+  },
+  "required": [
+    "世界",
+    "user",
+    "白雅琴",
+    "沐嫣染",
+    "沐冰铃",
+    "白雅婷",
+    "阮软",
+    "秦韵",
+    "萝莉团"
+  ]
+}

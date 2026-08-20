@@ -12,3 +12,37 @@
 .sb-status-bar *::after {
   box-sizing: border-box;
 }
+
+/* 角色切换 tab 栏（配置 roles 后显示） */
+.sb-role-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 10px 0;
+}
+
+.sb-role-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 14px;
+  border: 1px solid var(--sb-border);
+  border-radius: var(--sb-radius-pill);
+  background: var(--sb-surface);
+  color: var(--sb-text-muted);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.sb-role-tab.active {
+  border-color: var(--sb-primary);
+  background: color-mix(in srgb, var(--sb-primary) 12%, var(--sb-surface));
+  color: var(--sb-text);
+  font-weight: 600;
+}
+
+.sb-role-tab-icon {
+  font-size: 13px;
+}

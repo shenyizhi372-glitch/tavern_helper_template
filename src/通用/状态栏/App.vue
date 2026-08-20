@@ -8,6 +8,19 @@
         @click="settingsOpen = true"
       />
     </div>
+    <div v-if="roleTabs.length > 1" class="sb-role-tabs">
+      <button
+        v-for="r in roleTabs"
+        :key="r.id"
+        class="sb-role-tab"
+        :class="{ active: r.id === activeRoleId }"
+        type="button"
+        @click="activeRoleId = r.id"
+      >
+        <span class="sb-role-tab-icon">{{ r.icon || '👤' }}</span>
+        <span class="sb-role-tab-name">{{ r.name || r.id }}</span>
+      </button>
+    </div>
     <StatImage
       v-for="image in topImages"
       :key="image.id"
@@ -19,7 +32,7 @@
       :placeholder="image.placeholder"
     />
     <StatusSection
-      v-for="section in normalized.sections"
+      v-for="section in visibleSections"
       :key="section.id"
       :section="section"
       :data="data"
@@ -82,6 +95,15 @@ watch(
 
 const settingsOpen = ref(false);
 const hasSettings = computed(() => !!props.config.gallery || !!props.config.settings);
+
+/** 角色切换：配置 roles 后顶部显示角色 tab，带 role 的分区按当前角色过滤；无 roles 时全部分区常驻 */
+const roleTabs = computed(() => props.config.roles ?? []);
+const activeRoleId = ref(roleTabs.value[0]?.id ?? '');
+const visibleSections = computed(() => {
+  const sections = normalized.value.sections;
+  if (roleTabs.value.length <= 1) return sections;
+  return sections.filter((s) => !s.role || s.role === activeRoleId.value);
+});
 
 /** 设置弹窗 tab（外部可跳转；通用版无状态栏内锁按钮，仅保持接口一致） */
 const settingsTab = ref<'appearance' | 'gallery' | 'gallery-manage'>('appearance');

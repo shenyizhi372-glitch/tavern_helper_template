@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "系统": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前剧情阶段": {
+          "default": "起·相遇",
+          "type": "string",
+          "enum": [
+            "起·相遇",
+            "承·破冰",
+            "转·扩张",
+            "合·验收"
+          ]
+        },
+        "当前地点": {
+          "default": "王道异能学院",
+          "type": "string"
+        },
+        "最近事件": {
+          "default": "学院发布「研究异能黑暗森林里的魔兽人」委托，叶冰璃接下委托，独自深入森林",
+          "type": "string"
+        }
+      }
+    },
+    "叶冰璃": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "调教进度": {
+          "default": 0,
+          "type": "number"
+        },
+        "胸部状况": {
+          "default": "匀称贫乳被蓝白裙衣襟轻轻遮住，乳尖平静",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "无毛肥穴闭合，尚未被开发",
+          "type": "string"
+        },
+        "淫纹状况": {
+          "default": "小腹光洁，还没有淫纹",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "面无表情，湛蓝美眸空洞",
+          "type": "string"
+        },
+        "吊带袜状况": {
+          "default": "白色吊带袜干净整洁，勒着大腿根部雪白肉肉",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "学院委托……尽快完成，不想在森林里多待",
+          "type": "string"
+        }
+      }
+    },
+    "叶理": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "怀疑度": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "支线": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "苏沐雪": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "攻略进度": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        },
+        "白汐": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "攻略进度": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        },
+        "炎绯": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "攻略进度": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        },
+        "林晚晴": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "攻略进度": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

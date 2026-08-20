@@ -359,6 +359,8 @@ export interface SectionConfig {
   label: string;
   /** 区块图标 */
   icon?: string;
+  /** 所属角色 id（配置 roles 后启用角色切换；缺省 = 常驻分区，所有角色都显示） */
+  role?: string;
   /** 是否可折叠，默认 true */
   collapsible?: boolean;
   /** 默认是否折叠，默认 false */
@@ -373,10 +375,22 @@ export interface SectionConfig {
   fields: FieldConfig[];
 }
 
+/** 角色 tab（角色切换）：配置后状态栏顶部显示角色切换按钮，一次只显示当前角色的分区 */
+export interface RoleTab {
+  /** 唯一 id，与 section.role 对应 */
+  id: string;
+  /** tab 图标 */
+  icon?: string;
+  /** tab 名称，缺省用 id */
+  name?: string;
+}
+
 /** 状态栏总配置 */
 export interface StatusBarConfig {
   /** 顶部标题，省略则不显示 */
   title?: string;
+  /** 角色切换（可选）：配置后顶部显示角色 tab，带 role 的分区按当前角色过滤；不配置则全部分区常驻 */
+  roles?: RoleTab[];
   /** 面板级图片（顶部立绘区 / 背景图），按声明顺序渲染 */
   images?: PanelImage[];
   /** 图鉴配置（人物立绘分阶段 + 解锁 + 密钥），开启设置界面的图鉴 tab */

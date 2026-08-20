@@ -25,8 +25,8 @@
     <HeaderRow :data="data.系统" />
 
     <div class="sb-layout">
-      <!-- 左侧：当前角色立绘（宽度由「立绘大小」设置控制） -->
-      <div v-if="heroineGallery" class="sb-portrait" :style="{ width: portraitWidth }">
+      <!-- 左侧：当前角色立绘（宽度由「立绘大小」设置控制；无图模式隐藏） -->
+      <div v-if="portraitVisible && heroineGallery" class="sb-portrait" :style="{ width: portraitWidth }">
         <StageImage
           :gallery="heroineGallery"
           :data="data"
@@ -84,6 +84,9 @@ const openSettings = inject<(tab: 'appearance' | 'gallery' | 'gallery-manage') =
 /** 立绘宽度设置（由 App 注入 useSettings 的 portrait，默认 140） */
 const portrait = inject<{ value: number }>('sbPortrait', { value: 140 });
 const portraitWidth = computed(() => `${Math.round(portrait.value)}px`);
+
+/** 显示立绘开关（无图模式：关闭后立绘区隐藏） */
+const portraitVisible = inject<{ value: boolean }>('sbPortraitVisible', { value: true });
 
 /** 当前展示角色（多角色时由顶部 tab 切换；默认第一个） */
 const activeRoleId = ref(props.gallery?.characters[0]?.id ?? '');

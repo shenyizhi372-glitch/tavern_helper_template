@@ -89,6 +89,8 @@ provide('sbKeys', state.keys);
 provide('sbPortrait', state.portrait);
 /** 立绘随变量切换开关（默认开） */
 provide('sbPortraitAuto', state.portraitAuto);
+/** 显示立绘开关（无图模式） */
+provide('sbPortraitVisible', state.portraitVisible);
 
 /** 主题变量同步到 --c-*（自有组件换肤联动：好感度条、角色卡、剧情选项） */
 const cssVars = computed(() => {

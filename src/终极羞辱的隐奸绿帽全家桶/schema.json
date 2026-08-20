@@ -1,0 +1,321 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "世界": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "剧情阶段": {
+          "default": "初始期",
+          "type": "string",
+          "enum": [
+            "初始期",
+            "展开期",
+            "收网期"
+          ]
+        },
+        "当前日期": {
+          "default": "沐家攻略第1天",
+          "type": "string"
+        },
+        "时间段": {
+          "default": "傍晚",
+          "type": "string"
+        },
+        "当前场景": {
+          "default": "沐家宅邸-客厅",
+          "type": "string"
+        },
+        "最近事件": {
+          "default": "<user>以神赐者组织外勤身份登门沐家，以调查结缘书失窃案为名，初见沐家全家女性",
+          "type": "string"
+        },
+        "收集进度": {
+          "default": "暂无收集，图鉴待开启",
+          "type": "string"
+        }
+      }
+    },
+    "沐温凝": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 10,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "在厨房张罗晚饭，围裙下是肉丝裤袜",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "连衣裙配肉丝裤袜，围裙系在腰间",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "丰乳在衣襟下饱满坠着，乳尖被衣料轻轻磨蹭",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "熟女蜜穴闭合，毛发浓密，尚无人碰触",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "温婉含笑，招呼客人时周到得体",
+          "type": "string"
+        },
+        "黑丝裤袜状况": {
+          "default": "干净平整，包裹着丰腴大腿",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "这后生倒是勤快，就是眼神有时候让人心慌……想什么呢，人家是组织派来的正经人",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "沐嫣染": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 5,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "在客厅训弟弟，手里捏着戒尺",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "热裤短裙配黑丝，皮靴",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "饱满御姐乳在衣襟下绷紧，随呼吸起伏",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "嫩穴闭合，从未被进入",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "凌厉凤眼，一脸\"别惹我\"",
+          "type": "string"
+        },
+        "神赐力状况": {
+          "default": "黑发如墨，神赐力未激发",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "哼，又来个弱鸡外勤，别拖姐姐后腿就行",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "沐冰铃": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 5,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "趴在沙发上看书，白袜小脚晃来晃去",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "小裙子配白袜，蓝白条纹内裤",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "少女初发育的娇小乳，衣襟微微鼓起",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "无毛肥逼闭合，从未被开发",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "面无表情，唯独看到哥哥时眼神软下来",
+          "type": "string"
+        },
+        "契合度": {
+          "default": 100,
+          "type": "number"
+        },
+        "内心话": {
+          "default": "（对外人）……不熟，不想说话",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "沐霜凝": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 5,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "坐在沙发上打电话训下属",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "白裙黑丝，高跟鞋",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "巨乳在衣襟下绷紧，呼之欲出",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "蜜穴闭合，阴毛浓密",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "高冷板脸，眼神像在看下属",
+          "type": "string"
+        },
+        "蜜穴状况": {
+          "default": "阴毛浓密，尚未剃净",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "登徒子，离我的外甥远点",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "软软": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 10,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "抱着舞鞋蹲在芭蕾舞房门口等昕哥哥",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "芭蕾舞服白棉裙，双马尾白袜",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "少女初发育的娇小乳，在舞服下轻轻起伏",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "幼嫩肥穴闭合，从未被碰触",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "圆圆软脸，被凶一句就红眼眶",
+          "type": "string"
+        },
+        "芭蕾裙状况": {
+          "default": "白棉裙干净整洁，裙摆软软垂着",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "昕哥哥怎么还不来接我……那个人怎么又来了",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "守护神沐星怜": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 5,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "在祭堂偷吃红烧肉贡品",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "红色肚兜，大红绣花幼女亵裤，绣\"沐\"字红绳吊坠",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "幼女身形，娇小平坦",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "淡樱色神逼紧闭，万年处女膜完好（神明屏障护体）",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "端着神明架子，嘴角还沾着红烧肉油光",
+          "type": "string"
+        },
+        "处女膜进度": {
+          "default": 55,
+          "type": "number"
+        },
+        "愿望卷收集": {
+          "default": "无（尚未向<user>发放愿望卷）",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "凡人，贡品放下就可以走了……肉包子，真好吃",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

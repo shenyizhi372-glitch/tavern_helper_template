@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "世界": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前日期": {
+          "default": "2026/08/11",
+          "type": "string"
+        },
+        "当前时间段": {
+          "default": "上午",
+          "type": "string"
+        },
+        "当前场景": {
+          "default": "林家-客厅",
+          "type": "string"
+        },
+        "剧情阶段": {
+          "default": "初始",
+          "type": "string",
+          "enum": [
+            "初始",
+            "妹妹契约期",
+            "母亲契约期",
+            "母女沦陷期"
+          ]
+        },
+        "最近事件": {
+          "default": "<user>注意到林家母女，开始布局",
+          "type": "string"
+        }
+      }
+    },
+    "林小蛮": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "好感度": {
+          "default": 0,
+          "type": "number"
+        },
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "胸部状况": {
+          "default": "贫乳平坦，乳尖被衣料摩擦得微微挺立，颜色泛粉",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "白虎肥穴紧致闭合，两片粉嫩厚唇贴在一起，被紧身裤勒出骆驼趾的轮廓，爱液微微渗出润湿了裤缝",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "童颜泛着粉红，虎牙咬着下唇，眼神躲闪却忍不住偷瞄",
+          "type": "string"
+        },
+        "白袜状况": {
+          "default": "纯白袜筒干净，脚趾在鞋里蜷起又松开",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "什么偶像培训……不就是让我穿这种裤子给他们看吗，可哥哥让我坚持，我总不能让他失望",
+          "type": "string"
+        }
+      }
+    },
+    "林凤仪": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "好感度": {
+          "default": 0,
+          "type": "number"
+        },
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "胸部状况": {
+          "default": "木瓜巨乳沉甸甸地坠着，乳尖在布料下悄然挺立，乳晕颜色深红",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "黑阴毛茂盛下肥厚的阴唇充血微肿，蜜缝湿润，稍一挤压就渗出黏腻的爱液",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "凤目微眯，眉间蹙起，潮红从耳根蔓延到脖颈",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "这个年轻人……我守寡这些年，怎会因为他一句话就……不行，莫要再想",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

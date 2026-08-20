@@ -66,7 +66,12 @@
         </div>
         <div v-if="gallery" class="sb-settings-group">
           <label class="sb-settings-check">
-            <input type="checkbox" v-model="portraitAuto" />
+            <input type="checkbox" v-model="portraitVisible" />
+            <span>显示立绘</span>
+          </label>
+          <div class="sb-settings-check-note">关闭后立绘区与图鉴隐藏，状态栏变为纯文字</div>
+          <label class="sb-settings-check">
+            <input type="checkbox" v-model="portraitAuto" :disabled="!portraitVisible" />
             <span>立绘随变量切换</span>
           </label>
           <div class="sb-settings-check-note">关闭后固定显示初始立绘，不再随好感度等条件切换</div>
@@ -78,6 +83,7 @@
             max="240"
             step="10"
             :value="portrait"
+            :disabled="!portraitVisible"
             @input="portrait = Number(($event.target as HTMLInputElement).value)"
           />
         </div>
@@ -141,19 +147,28 @@ const open = computed({
 type SettingsTabId = 'appearance' | 'gallery' | 'gallery-manage';
 
 const activeTab = ref<SettingsTabId>('appearance');
+
+const { presets, themeId, density, fontScale, portrait, portraitAuto, portraitVisible, tryKey, imageUnlocked } = props.state;
+
 const tabs = computed(() => [
   { id: 'appearance' as const, label: '外观' },
-  { id: 'gallery' as const, label: '图鉴' },
+  // 无图模式（显示立绘关闭）下隐藏图鉴入口
+  ...(portraitVisible.value ? [{ id: 'gallery' as const, label: '图鉴' }] : []),
   ...(props.galleryEditable ? [{ id: 'gallery-manage' as const, label: '图鉴管理' }] : []),
 ]);
+
+// 关闭显示立绘时，若当前在图鉴 tab 则回到外观
+watch(portraitVisible, (visible) => {
+  if (!visible && (activeTab.value === 'gallery' || activeTab.value === 'gallery-manage')) {
+    activeTab.value = 'appearance';
+  }
+});
 
 const DENSITIES = [
   { value: 'compact' as const, label: '紧凑' },
   { value: 'normal' as const, label: '常规' },
   { value: 'comfortable' as const, label: '舒适' },
 ];
-
-const { presets, themeId, density, fontScale, portrait, portraitAuto, tryKey, imageUnlocked } = props.state;
 
 /** 外部切换 tab 信号（由 App 注入：如点击好感度锁 → 跳转图鉴 tab） */
 const settingsTab = inject<Ref<SettingsTabId>>('sbSettingsTab', ref('appearance'));

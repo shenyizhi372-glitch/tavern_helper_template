@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "系统": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前时间": {
+          "default": "中兴三年 秋 申时",
+          "type": "string"
+        },
+        "当前地点": {
+          "default": "蛮帅府",
+          "type": "string"
+        },
+        "当前场景": {
+          "default": "大堂",
+          "type": "string"
+        },
+        "当前对象": {
+          "default": "洛雪莹",
+          "type": "string",
+          "enum": [
+            "洛雪莹",
+            "叶可儿",
+            "叶甜儿",
+            "叶雯儿",
+            "叶芊儿",
+            "多女"
+          ]
+        }
+      }
+    },
+    "洛雪莹": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "调教阶段": {
+          "default": "抗拒",
+          "type": "string",
+          "enum": [
+            "抗拒",
+            "动摇",
+            "沉沦",
+            "依恋"
+          ]
+        },
+        "顺从度": {
+          "default": 0,
+          "type": "number"
+        },
+        "依恋度": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "叶可儿": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "调教阶段": {
+          "default": "抗拒",
+          "type": "string",
+          "enum": [
+            "抗拒",
+            "动摇",
+            "沉沦",
+            "依恋"
+          ]
+        },
+        "顺从度": {
+          "default": 0,
+          "type": "number"
+        },
+        "依恋度": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "叶甜儿": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "调教阶段": {
+          "default": "抗拒",
+          "type": "string",
+          "enum": [
+            "抗拒",
+            "动摇",
+            "沉沦",
+            "依恋"
+          ]
+        },
+        "顺从度": {
+          "default": 0,
+          "type": "number"
+        },
+        "依恋度": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "叶雯儿": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "调教阶段": {
+          "default": "抗拒",
+          "type": "string",
+          "enum": [
+            "抗拒",
+            "动摇",
+            "沉沦",
+            "依恋"
+          ]
+        },
+        "顺从度": {
+          "default": 0,
+          "type": "number"
+        },
+        "依恋度": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "叶芊儿": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "调教阶段": {
+          "default": "动摇",
+          "type": "string",
+          "enum": [
+            "抗拒",
+            "动摇",
+            "沉沦",
+            "依恋"
+          ]
+        },
+        "顺从度": {
+          "default": 0,
+          "type": "number"
+        },
+        "依恋度": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    }
+  }
+}

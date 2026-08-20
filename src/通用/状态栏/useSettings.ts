@@ -28,6 +28,8 @@ export function useSettings(gallery: GalleryConfig | undefined, settings: Settin
   }
   /** 立绘随变量切换（默认开；关=固定初始立绘，不再随好感度等条件切换） */
   const portraitAuto = useLocalStorage<boolean>('sb:portrait-auto', true);
+  /** 显示立绘开关（无图模式：关闭后立绘区与图鉴隐藏，状态栏变纯文字） */
+  const portraitVisible = useLocalStorage<boolean>('sb:portrait-visible', true);
   const keys = useLocalStorage<string[]>('sb:keys', []);
   const unlocked = useLocalStorage<string[]>('sb:gallery-unlocked', []);
 
@@ -123,6 +125,7 @@ export function useSettings(gallery: GalleryConfig | undefined, settings: Settin
     fontScale,
     portrait,
     portraitAuto,
+    portraitVisible,
     keys,
     presets,
     mergedTheme,

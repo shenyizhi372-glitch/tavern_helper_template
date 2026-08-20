@@ -170,14 +170,22 @@ const sectionSchema = z.object({
   id: z.string().min(1, 'section.id 不能为空'),
   label: z.string().min(1, 'section.label 不能为空'),
   icon: z.string().optional(),
+  role: z.string().optional(),
   collapsible: z.boolean().optional(),
   defaultCollapsed: z.boolean().optional(),
   image: imageStyleSchema.optional(),
   fields: z.array(fieldSchema).min(1, 'section.fields 至少需要一个字段'),
 });
 
+const roleTabSchema = z.object({
+  id: z.string().min(1, 'role.id 不能为空'),
+  icon: z.string().optional(),
+  name: z.string().optional(),
+});
+
 const configSchema = z.object({
   title: z.string().optional(),
+  roles: z.array(roleTabSchema).optional(),
   images: z.array(panelImageSchema).optional(),
   gallery: gallerySchema.optional(),
   settings: settingsSchema.optional(),

@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "世界": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "剧情阶段": {
+          "default": "初始期",
+          "type": "string",
+          "enum": [
+            "初始期",
+            "潜行期",
+            "展开期",
+            "收网期"
+          ]
+        },
+        "当前日期": {
+          "default": "到达绿森小镇第1天",
+          "type": "string"
+        },
+        "时段": {
+          "default": "傍晚",
+          "type": "string"
+        },
+        "当前地点": {
+          "default": "绿森小镇-旅馆",
+          "type": "string"
+        },
+        "最近事件": {
+          "default": "<user>伪装成孤儿被冒险者小队收留，刚抵达绿森小镇旅馆暂居",
+          "type": "string"
+        },
+        "剧情发展": {
+          "default": "正常",
+          "type": "string",
+          "enum": [
+            "正常",
+            "暧昧",
+            "露骨",
+            "其他"
+          ]
+        }
+      }
+    },
+    "师傅古兰": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 10,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "冷眉练剑，监督全队",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "紧身黑色锻炼服，束胸掩不住丰硕",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "成熟丰乳沉甸甸坠着，乳尖在冷硬衣料下悄然挺立",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "五百多年处女地紧致闭合，蜜缝干燥，却莫名泛起一丝潮意",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "冷眉微蹙，凤目审视，眼角却藏着一丝不自然的潮红",
+          "type": "string"
+        },
+        "威严状况": {
+          "default": "主母威严完好，凤目一冷全队噤声",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "这孩子眼神太沉……我活了五百多年，怎会为一个小孤儿心慌",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "妮丝": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 5,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "张牙舞爪地追着<user>跑",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "白色法师短裙，白丝吊带袜",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "童颜巨乳随着她张牙舞爪的动作轻晃，乳尖在衣料下若隐若现",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "粉嫩肥穴紧紧闭合，雌小鬼的紧致，被气鼓鼓的动作夹得微微发热",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "龇着虎牙，脸蛋气鼓鼓，眼神却忍不住往<user>身上瞟",
+          "type": "string"
+        },
+        "白袜状况": {
+          "default": "白袜干干净净裹着脚踝，她从不穿给哥哥看",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "这个小屁孩……哼，敢抢哥哥的注意力，看我不把他整哭",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "奥萝拉": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 5,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "在魔法书房备课，笨手笨脚打翻墨水瓶",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "纯白法师包臀裙，黑丝裤袜，金丝眼镜",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "青涩胸脯随笨拙动作轻晃，乳尖在法师袍下悄然挺立",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "白虎嫩穴未被开发，紧致闭合，被自己偷看的色情书惹得微微发痒",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "脸红到耳根，眼神躲闪，嘴里含含糊糊",
+          "type": "string"
+        },
+        "黑丝状况": {
+          "default": "黑丝裤袜干净平整，包裹着水蜜桃美臀",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "那些书里的画面……我怎么就忍不住想，好羞人",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    },
+    "伊丝娜": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "堕落度": {
+          "default": 0,
+          "type": "number"
+        },
+        "好感度": {
+          "default": 5,
+          "type": "number"
+        },
+        "当前行动": {
+          "default": "懒洋洋趴在酒馆吧台，眯着猫瞳晒太阳",
+          "type": "string"
+        },
+        "当前穿搭": {
+          "default": "黑色包臀热裤，齐逼红裙，黑丝网袜长靴",
+          "type": "string"
+        },
+        "胸部状况": {
+          "default": "饱满猫娘曲线在衣襟半敞下起伏，乳尖若隐若现",
+          "type": "string"
+        },
+        "私处状况": {
+          "default": "猫尾遮掩下的禁地微微湿润，被酒气熏得发热",
+          "type": "string"
+        },
+        "脸部状况": {
+          "default": "慵懒的猫眼里带着不屑，嘴角却勾着若有若无的弧度",
+          "type": "string"
+        },
+        "猫耳猫尾状况": {
+          "default": "猫耳收起，猫尾懒洋洋地垂着",
+          "type": "string"
+        },
+        "内心话": {
+          "default": "这小鬼的酒还挺香……哼，就当是陪他玩玩",
+          "type": "string"
+        },
+        "最近性行为": {
+          "default": "无",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
